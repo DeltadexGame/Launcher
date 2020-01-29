@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap');
+    
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: #1f222a;
+    color: white;
+    font-family: "Arial", sans-serif;
+}
+
+h1, h2 {
+    margin: 0.2vh;
+}
+
+h3, h4, h5, p, section, article, input, button {
+    margin-bottom: 1em;
+}
+
+.login {
+    margin-left: 0.8em;
+}
+
+h1 {
+    font-size: 3.2em;
+}
+
+.alert {
+    color: rgb(191, 191, 191);
+}
+
+button {
+    background-color: blue;
+    font-family: "Roboto", sans-serif;
+    color: white;
+    border: none;
+    border-radius: 0.2em;
+    padding: 1em;
+    cursor: pointer;
+    margin-top: 1em;
+    display: block;
+}
+
+button:hover {
+    background-color: rgb(0, 48, 136);
+}
+
+.default {
+    height: 100%;
+    z-index: -3;
+}
+        
+.main-sidebar, .main-navbar, .dark {
+    color: rgb(105, 105, 105);
+}
+    
+.main {
+    margin-left: 15vh;
+    padding: 0px 10px;
+}
+    
+.main_content {
+    padding-top: 14vh;
+}
+
+input {
+   background-color: rgb(24, 26, 32);
+   border: none;
+   color: white;
+}
+    
+.sidebar {
+    height: 100%;
+    width: 10vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgb(20, 23, 28);
+    padding-top: 20px;
+}
+
+.sidebar_inner {
+    margin-top: 14vh;
+}
+    
+.sidebar li {
+    display: block;
+    color: rgb(105, 105, 105);
+    cursor: pointer;
+}
+
+.sidebar li:hover {
+    color: rgb(172, 111, 149);
+}
+    
+@media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+}
+    
+nav {
+    overflow: hidden;
+    background-color: rgb(42, 45, 48);
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+}
+    
+nav li {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.sidebar_inner ul {
+    margin: 0;
+}
+
+nav li a {
+    color: #f2f2f2;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #acacac;
+}
+    
+ul li {
+    text-decoration: none;
+    list-style: none;
+}
+    
+.tab_nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: 0;
+}
+
+.content {
+    grid-area: "main_left";
+    width: 80%;
+           
+}
+    
+.main_content {
+    display: grid;
+    grid-template-columns: 75% 25%;
+    grid-template-rows: auto;
+    grid-template-areas: "main_left main_right";
+}
+
+.topnav {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.cards img {
+    margin-right: 4vh;
+}
+
+.md-18 {
+    font-size: 3.2em;
+    color: #666775;
+}
+
