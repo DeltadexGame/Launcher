@@ -31,7 +31,7 @@ Launcher::Launcher() {
   OnResize(window_->width(), window_->height());
 
   // Set the file as the first page
-  overlay_->view()->LoadURL("file:///app2.html");
+  overlay_->view()->LoadURL("file:///app.html");
 
   app_->set_listener(this);
 
@@ -86,9 +86,9 @@ JSValueRef OnButtonClick(JSContextRef ctx, JSObjectRef function,
   // Download the game. 
   // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
   // When jar files will be built of the game, the following link below will be replaced.
-	HRESULT hresult;
-	LPCTSTR Url = _T("https://github.com/michealodwyer26/Amid-The-Ruins-Of-Aspic/raw/master/Amid%20The%20Ruins%20Of%20Aspic.jar"), File = _T("assets/someFile2.jar");
-	hresult = URLDownloadToFile (0, Url, File, 0, 0);
+  HRESULT hresult;
+  LPCTSTR Url = _T("https://github.com/michealodwyer26/Amid-The-Ruins-Of-Aspic/raw/master/Amid%20The%20Ruins%20Of%20Aspic.jar"), File = _T("assets/someFile2.jar");
+  hresult = URLDownloadToFile (0, Url, File, 0, 0);
 
   // Open the JAR file by executing the following command in WINDOWS.
   system("start javaw -jar assets/someFile2.jar");
