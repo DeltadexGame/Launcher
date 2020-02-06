@@ -19,8 +19,16 @@ h3, h4, h5, p, section, article, input, button {
     margin-bottom: 1em;
 }
 
+button, nav li {
+    cursor: pointer;
+}
+
 .login {
     margin-left: 0.8em;
+}
+
+.link {
+    cursor: pointer;
 }
 
 h1 {
@@ -176,3 +184,98 @@ ul li {
     color: #666775;
 }
 
+.icons li {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3vh;
+}
+
+.md-18:hover{
+    color: rgb(172, 111, 149);
+    cursor: pointer;
+}
+
+.icons {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 80vh;
+}
+
+.material-icons.active {
+    color: #e1e1e1
+}
+
+.end {
+    margin-top: auto;
+}
+
+.tooltip {
+    display:inline-block;
+    position:relative;
+    text-align:left;
+}
+
+.tooltip .right {
+    margin-left:4.5em;
+    min-width: 50px; 
+    min-height: 30px;
+    transform: translate(0, -50%);
+    padding:10px 20px;
+    color:#CCCCCC;
+    background-color:#000000;
+
+    font-size: 0.8em;
+    border-radius: 8px;
+    position: absolute;
+    margin-top: 0em;
+    overflow: auto;
+    z-index: 3;
+    box-shadow: 0 1px 4px #000000;
+    visibility: hidden; 
+    opacity: 0; 
+    transition: opacity 0.5s;
+
+}
+
+.icons li {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.tooltip:hover .right {
+    visibility:visible;
+    opacity:1;
+}
+
+.tooltip .right i {
+    position:absolute;
+    top:50%;
+    right:100%;
+    margin-top:-12px;
+    width:12px;
+    height:24px;
+}
+
+.tooltip .right i::after {
+    content:'';
+    width:12px;
+    height:12px;
+    position:absolute;
+    left:0;
+    top:50%;
+    transform:translate(50%,-50%) rotate(-45deg);
+    background-color:#000000;
+    box-shadow:0 1px 8px #000000;
+}
+
+.user_dropdown {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.cursor {
+    cursor: pointer;
+}
