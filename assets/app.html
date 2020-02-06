@@ -13,7 +13,7 @@
                   <div class="btn-primary tooltip">
                     <i class="material-icons md-18 active">crop_din</i>
                     <div class="right">
-                        <h3>Home</h3>
+                        <h3 onclick="OnLoadHome()">Home</h3>
                         <i></i>
                     </div>
                 </div>
@@ -72,18 +72,13 @@
 
       </div>
       
+
       <nav class="topnav">
+        <span id="logo" onclick="OnLoadHome();">Deltadex</span>
         <ul>
-          <li class="link"><a href="latest-cards.html" id="latest_cards">Latest Cards</a></li>
-          <li class="link">News</li>
-          <li class="link">
-            <div class="user_dropdown">
-              <img src="user.PNG" height="20px" width="20px"/>
-              <p>xpl8</p>
-              <i class="material-icons cursor">keyboard_arrow_down</i>
-              
-            </div>
-          </li>
+          <li><a href="">Download</a></li>
+          <li onclick="OnLoadLatestCards();">Latest Cards</li>
+          <li onclick="OnLoadLatestNews();">News</li>
         </ul>
       
       </nav>
@@ -96,8 +91,6 @@
                 <h1>Get Started</h1>
 
                 <button onclick="OnButtonClick();">Launch Game</button>
-                <button id="launch_game">Switch View</button>
-
                 <div id="result"></div>
             </article>
 
@@ -112,9 +105,6 @@
 
     <script>
       function bindCallbacks() {
-
-        let latest_cards = documnet.getElementById("latest_cards");
-        latest_cards.addEventListener("click", event => OnLoadLatestCards());
 
         let login = document.getElementById("login");
         login.addEventListener("click", event => OnLoadLogin());

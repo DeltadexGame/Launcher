@@ -22,6 +22,13 @@ public:
   virtual void OnFinishLoading(View* caller) override;
 
   virtual void UpdateView(const JSObject& obj, const JSArgs& args);
+  virtual void LoadLogIn(const JSObject& obj, const JSArgs& args);
+  virtual void LoadSignIn(const JSObject& obj, const JSArgs& args);
+  virtual void LoadLatestCards(const JSObject& obj, const JSArgs& args);
+  virtual void LoadLatestNews(const JSObject& obj, const JSArgs& args);
+  virtual void LoadHome(const JSObject& obj, const JSArgs& args);
+
+  virtual void UpdateCursor(const JSObject& obj, const JSArgs& args);
 
   virtual void OnDOMReady(View* caller) override;
 

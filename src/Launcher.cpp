@@ -52,8 +52,34 @@ void Launcher::Run() {
 // this function gets called and depending on the button clicked,
 // the view will update accordingly.
 void Launcher::UpdateView(const JSObject& obj, const JSArgs& args) {
-  overlay_->view()->LoadURL("file:///app.html");
+  overlay_->view()->LoadURL("file:///app2.html");
+}
 
+void Launcher::LoadSignIn(const JSObject& obj, const JSArgs& args) {
+  overlay_->view()->LoadURL("file:///signin.html");
+}
+
+void Launcher::LoadLogIn(const JSObject& obj, const JSArgs& args) {
+  overlay_->view()->LoadURL("file:///login.html");
+
+}
+
+void Launcher::LoadLatestCards(const JSObject& obj, const JSArgs& args) {
+  overlay_->view()->LoadURL("file:///latest-cards.html");
+}
+
+void Launcher::LoadHome(const JSObject& obj, const JSArgs& args) {
+  overlay_->view()->LoadURL("file:///app.html");
+}
+
+void Launcher::LoadLatestNews(const JSObject& obj, const JSArgs& args) {
+  overlay_->view()->LoadURL("file:///news.html");
+}
+
+// Update cursor when user hovers over links
+void Launcher::UpdateCursor(const JSObject& obj, const JSArgs& args) {
+  Cursor cursor = Cursor::kCursor_Pointer;
+  window_->SetCursor(cursor);
 }
 
 // Clean up resources here
@@ -87,11 +113,11 @@ JSValueRef OnButtonClick(JSContextRef ctx, JSObjectRef function,
   // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
   // When jar files will be built of the game, the following link below will be replaced.
   HRESULT hresult;
-  LPCTSTR Url = _T("https://github.com/michealodwyer26/Amid-The-Ruins-Of-Aspic/raw/master/Amid%20The%20Ruins%20Of%20Aspic.jar"), File = _T("assets/someFile2.jar");
+  LPCTSTR Url = _T("https://drive.google.com/uc?export=download&id=18ObJuHnwmoLe0r09KtxU3oZyaMckWm6A"), File = _T("assets/deltadex.jar");
   hresult = URLDownloadToFile (0, Url, File, 0, 0);
 
   // Open the JAR file by executing the following command in WINDOWS.
-  system("start javaw -jar assets/someFile2.jar");
+  system("start javaw -jar assets/deltadex.jar");
 
   return JSValueMakeNull(ctx);
 }
@@ -103,7 +129,12 @@ void Launcher::OnDOMReady(View* view) {
   JSObject global = JSGlobalObject();
 
   global["OnUpdateView"] = BindJSCallback(&Launcher::UpdateView);
+  global["OnUpdateCursor"] = BindJSCallback(&Launcher::UpdateCursor);
   global["GetMessage"] = BindJSCallback(&Launcher::UpdateView);
+  global["OnLoadLatestCards"] = BindJSCallback(&Launcher::LoadLatestCards);
+  global["OnLoadLatestNews"] = BindJSCallback(&Launcher::LoadLatestNews);
+  global["OnLoadHome"] = BindJSCallback(&Launcher::LoadHome);
+
   JSStringRef name = JSStringCreateWithUTF8CString("OnButtonClick");
 
   JSObjectRef function = JSObjectMakeFunctionWithCallback(context, name, 
