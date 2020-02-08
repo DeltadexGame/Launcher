@@ -7,7 +7,6 @@
 #define WINDOW_WIDTH  1100
 #define WINDOW_HEIGHT 800
 
-#include <windows.h>
 #include <tchar.h>
 #include <urlmon.h>
 #pragma comment(lib, "urlmon.lib")
@@ -55,13 +54,13 @@ void Launcher::UpdateView(const JSObject& obj, const JSArgs& args) {
   overlay_->view()->LoadURL("file:///app2.html");
 }
 
+// LoadSignIn --
 void Launcher::LoadSignIn(const JSObject& obj, const JSArgs& args) {
   overlay_->view()->LoadURL("file:///signin.html");
 }
 
 void Launcher::LoadLogIn(const JSObject& obj, const JSArgs& args) {
   overlay_->view()->LoadURL("file:///login.html");
-
 }
 
 void Launcher::LoadLatestCards(const JSObject& obj, const JSArgs& args) {
@@ -112,9 +111,9 @@ JSValueRef OnButtonClick(JSContextRef ctx, JSObjectRef function,
   // Download the game. 
   // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
   // When jar files will be built of the game, the following link below will be replaced.
-  HRESULT hresult;
-  LPCTSTR Url = _T("https://drive.google.com/uc?export=download&id=18ObJuHnwmoLe0r09KtxU3oZyaMckWm6A"), File = _T("assets/deltadex.jar");
-  hresult = URLDownloadToFile (0, Url, File, 0, 0);
+  // HRESULT hresult;
+  // LPCTSTR Url = _T("https://drive.google.com/uc?export=download&id=18ObJuHnwmoLe0r09KtxU3oZyaMckWm6A"), File = _T("assets/deltadex.jar");
+  // hresult = URLDownloadToFile (0, Url, File, 0, 0);
 
   // Open the JAR file by executing the following command in WINDOWS.
   system("start javaw -jar assets/deltadex.jar");
@@ -133,6 +132,7 @@ void Launcher::OnDOMReady(View* view) {
   global["GetMessage"] = BindJSCallback(&Launcher::UpdateView);
   global["OnLoadLatestCards"] = BindJSCallback(&Launcher::LoadLatestCards);
   global["OnLoadLatestNews"] = BindJSCallback(&Launcher::LoadLatestNews);
+  global["OnLoadLogIn"] = BindJSCallback(&Launcher::LoadLogIn);
   global["OnLoadHome"] = BindJSCallback(&Launcher::LoadHome);
 
   JSStringRef name = JSStringCreateWithUTF8CString("OnButtonClick");
