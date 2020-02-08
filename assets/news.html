@@ -1,0 +1,136 @@
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="file:///styles.css">   
+  </head>
+  <body>
+  
+  <div class="default">
+      <div class="sidebar">
+          <div class="sidebar_inner">
+            <ul class="icons">
+                <li class="link" onclick="OnLoadHome()">
+                  <div class="btn-primary tooltip">
+                    <i class="material-icons md-18 active">crop_din</i>
+                    <div class="right">
+                        <h3>Home</h3>
+                        <i></i>
+                    </div>
+                </div>
+                </li>
+
+                <li class="link" onclick="OnLoadLogIn()">
+                  <a href="login.html">
+                    <div class="btn-primary tooltip">
+                      <i class="material-icons md-18">group</i>
+                      <div class="right">
+                          <h3>Login</h3>
+                          <i></i>
+                      </div>
+                  </div>
+                  </a>
+                </li>
+
+                <li class="link" onclick="OnLoadLatestNews()">
+                  <a href="news.html">
+                    <div class="btn-primary tooltip">
+                      <i class="material-icons md-18">info</i>
+                      <div class="right">
+                          <h3>News</h3>
+                          <i></i>
+                      </div>
+                  </div>
+                  </a>
+                </li>
+
+                <li class="link" onclick="OnLoadLatestCards()">
+                  <a href="latest-cards.html">
+                    <div class="btn-primary tooltip">
+                      <i class="material-icons md-18">pages</i>
+                      <div class="right">
+                          <h3>Cards</h3>
+                          <i></i>
+                      </div>
+                  </div>
+                  </a>
+                </li>
+
+                <li class="end link">
+                  <a href="settings.html">
+                    <div class="btn-primary tooltip">
+                      <i class="material-icons md-18">settings</i>
+                      <div class="right">
+                          <h3 onclick="OnLoadSettings()">Settings</h3>
+                          <i></i>
+                      </div>
+                  </div>
+                  </a>
+
+                </li>
+              </ul>
+          </div>
+
+      </div>
+
+      <nav class="topnav">
+        <span id="logo" onclick="OnLoadHome();">Deltadex</span>
+        <ul>
+          <li onclick="OnLoadLatestCards();">Latest Cards</li>
+          <li onclick="OnLoadLatestNews();">News</li>
+        </ul>
+      
+      </nav>
+      
+      <div class="main">
+        <div class="main_content">
+          <article class="login">
+            <h1>Latest News</h1>
+
+            <h3>Just Announced: Released CollectorX Limited Edition Cards</h3>
+            <h3>Just Released: Released CollectorX Limited Edition Cards</h3>
+            <h3>Latest In: Released CollectorX Limited Edition Cards Number 2</h3>
+            <h3>New Cards: February 2020 Update Brings New Decks</h3>
+            <h3>Released: Card Decks have been released. </h3>
+            <h3>Released: Card Decks have been announced. To download, just update to the latest version.</h3>
+            <h3>Announcement: We have just released a new set of cards.</h3>
+        </article>
+
+        <article> 
+          <p>The following news items have been released:</p>
+
+          <ul>
+            <li>News Items </li>
+            <li>News Item 1 </li>
+            <li>News Item 2</li>
+            <li>News Item 3</li>
+            <li>News Item 4</li>
+            <li>News Item 5</li>
+            <li>News Item 5</li>
+            <li>News Item 6</li>
+            <li>News Item 7</li>
+          </ul>
+        </article>
+      </div>      
+      </div>
+    </div>
+
+    <script>
+      function bindCallbacks() {
+        let login = document.getElementById("login");
+        login.addEventListener("click", event => OnLoadLogin());
+
+        let links = document.getElementsByClassName("link");
+        
+        for (var i = 0; i < links.length; i++) {
+          let link = links[i];
+          link.addEventListener('click', event => OnUpdateView());
+          link.addEventListener("mouseover", event => OnUpdateCursor());
+        }
+	    }
+	  
+	    bindCallbacks();
+    </script>
+
+  </body>
+</html>
