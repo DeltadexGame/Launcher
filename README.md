@@ -1,7 +1,7 @@
 # Launcher v0.1.0
 This repo comprises the source code and assets for Team 10's Launcher for the Team Project Module, 3rd Year Computer Science at UCC. 
 
-![Live demo of the launcher in action](https://i.imgur.com/qSXiuFh.gifv)
+![Live demo of the launcher in action](https://i.imgur.com/qSXiuFh.gif)
 
 ## Development Phases 
 
@@ -11,7 +11,7 @@ and latest cards screens. Animations were also used, which I planned to convert 
 
 #### 2. Choosing A Library 
 Initially, I decided to use Rust's `webview` crate, which would allow the application to utilize the user system's webview, 
-but high DPI was not supported. 
+but high DPI was not supported, so I reconsidered other options that supported high DPI.
 
 Electron tends to lead to bloated file size and has performance issues. I wanted a lightweight solution which would promise both speed and high-performance, as well as small size. 
 
@@ -24,7 +24,7 @@ Development began mid-Week 2 once the mockups were finalised and is currently on
 #### To-Do
 The following items will be completed in the coming week(s):
 - Start communication with the API for sign-up and login of the users.
-- Download images from CDN for the client to make use of them.
+- Download images of cards from the project's CDN into an assets directory, for the game client to make use of them.
 
 ## Running/Building
 
