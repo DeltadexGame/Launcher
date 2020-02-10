@@ -1,6 +1,8 @@
 # Launcher v0.1.0
 This repo comprises the source code and assets for Team 10's Launcher for the Team Project Module, 3rd Year Computer Science at UCC. 
 
+[Live demo of the launcher in action](https://i.imgur.com/qSXiuFh.gifv)
+
 ## Development Phases 
 
 #### 1. Initial Mockups
@@ -8,11 +10,10 @@ InVision Studio was used to create the initial mockups of the launcher's numerou
 and latest cards screens. Animations were also used, which I planned to convert to CSS transitions later on. 
 
 #### 2. Choosing A Library 
-Initially, I decided to use Rust's webview crate, which would allow the application to utilize the user system's webview, 
+Initially, I decided to use Rust's `webview` crate, which would allow the application to utilize the user system's webview, 
 but high DPI was not supported. 
 
-Electron tends to have bloated and has performance issues. I wanted a lightweight solution which would promise both speed and high 
-performance, as well as small size. 
+Electron tends to lead to bloated file size and has performance issues. I wanted a lightweight solution which would promise both speed and high-performance, as well as small size. 
 
 I moved to Ultralight, which allows for the above. It allowed me to create the HTML/CSS/JS frontend, and then manage JS callbacks 
 with C++ for native tasks, such as executing the game's JAR file, etc., 
