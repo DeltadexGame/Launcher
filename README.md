@@ -1,7 +1,7 @@
 # Launcher v0.1.0
 This repo comprises the source code and assets for Team 10's Launcher for the Team Project Module, 3rd Year Computer Science at UCC. 
 
-[Live demo of the launcher in action](https://i.imgur.com/qSXiuFh.gifv)
+![Live demo of the launcher in action](https://i.imgur.com/qSXiuFh.gifv)
 
 ## Development Phases 
 
@@ -20,6 +20,11 @@ with C++ for native tasks, such as executing the game's JAR file, etc.,
 
 #### 3. Development 
 Development began mid-Week 2 once the mockups were finalised and is currently ongoing. 
+
+#### To-Do
+The following items will be completed in the coming week(s):
+- Start communication with the API for sign-up and login of the users.
+- Download images from CDN for the client to make use of them.
 
 ## Running/Building
 
