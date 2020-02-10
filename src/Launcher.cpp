@@ -111,10 +111,7 @@ JSValueRef OnButtonClick(JSContextRef ctx, JSObjectRef function,
   // Download the game. 
   // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
   // When jar files will be built of the game, the following link below will be replaced.
-  // HRESULT hresult;
-  // LPCTSTR Url = _T("https://drive.google.com/uc?export=download&id=18ObJuHnwmoLe0r09KtxU3oZyaMckWm6A"), File = _T("assets/deltadex.jar");
-  // hresult = URLDownloadToFile (0, Url, File, 0, 0);
-
+	HRESULT hr = URLDownloadToFile ( NULL, _T("https://drive.google.com/uc?export=download&id=18ObJuHnwmoLe0r09KtxU3oZyaMckWm6A"), _T("assets/deltadex.jar"), 0, NULL );
   // Open the JAR file by executing the following command in WINDOWS.
   system("start javaw -jar assets/deltadex.jar");
 
