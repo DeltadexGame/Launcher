@@ -5,21 +5,22 @@
     <link rel="stylesheet" type="text/css" href="file:///styles.css">   
   </head>
   <body>
-    <div class="default">
+  
+  <div class="default">
       <div class="sidebar">
           <div class="sidebar_inner">
             <ul class="icons">
-                <li class="link">
+                <li class="link" onclick="OnLoadHome()">
                   <div class="btn-primary tooltip">
                     <i class="material-icons md-18 active">crop_din</i>
                     <div class="right">
-                        <h3 onclick="OnLoadHome()">Home</h3>
+                        <h3>Home</h3>
                         <i></i>
                     </div>
                 </div>
                 </li>
 
-                <li class="link">
+                <li class="link" onclick="OnLoadLogIn()">
                   <a href="login.html">
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">group</i>
@@ -31,7 +32,7 @@
                   </a>
                 </li>
 
-                <li class="link">
+                <li class="link" onclick="OnLoadLatestNews()">
                   <a href="news.html">
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">info</i>
@@ -43,7 +44,7 @@
                   </a>
                 </li>
 
-                <li class="link">
+                <li class="link" onclick="OnLoadLatestCards()">
                   <a href="latest-cards.html">
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">pages</i>
@@ -60,7 +61,7 @@
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">settings</i>
                       <div class="right">
-                          <h3>Settings</h3>
+                          <h3 onclick="OnLoadSettings()">Settings</h3>
                           <i></i>
                       </div>
                   </div>
@@ -71,12 +72,10 @@
           </div>
 
       </div>
-      
 
       <nav class="topnav">
         <span id="logo" onclick="OnLoadHome();">Deltadex</span>
         <ul>
-          <li><a href="">Download</a></li>
           <li onclick="OnLoadLatestCards();">Latest Cards</li>
           <li onclick="OnLoadLatestNews();">News</li>
         </ul>
@@ -93,23 +92,19 @@
                 <button onclick="OnButtonClick();">Launch Game</button>
                 <div id="result"></div>
             </article>
-
             </article>
           </section>
-
+      </div>      
       </div>
-      
-      </div>
-      
     </div>
 
     <script>
       function bindCallbacks() {
-
         let login = document.getElementById("login");
         login.addEventListener("click", event => OnLoadLogin());
 
         let links = document.getElementsByClassName("link");
+        
         for (var i = 0; i < links.length; i++) {
           let link = links[i];
           link.addEventListener('click', event => OnUpdateView());
