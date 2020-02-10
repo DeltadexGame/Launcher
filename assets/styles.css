@@ -125,8 +125,6 @@ nav li {
     text-decoration: none;
 }
 
-
-
 .sidebar_inner ul {
     margin: 0;
 }
@@ -136,7 +134,7 @@ nav li a {
     text-decoration: none;
 }
 
-a:hover {
+.link:hover {
     color: #acacac;
 }
     
@@ -237,7 +235,6 @@ ul li {
     visibility: hidden; 
     opacity: 0; 
     transition: opacity 0.5s;
-
 }
 
 .icons li {
@@ -285,4 +282,8 @@ ul li {
 #logo {
     margin-right: auto;
     padding: 14px 16px;
+}
+
+.icons, .sidebar_inner {
+    margin-left: 2vh;
 }
