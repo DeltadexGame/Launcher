@@ -1,122 +1,132 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-    <title>Launcher v0.1.0 | Sign Up</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
     rel="stylesheet">
-    </head>
-   
+    <link rel="stylesheet" type="text/css" href="file:///styles.css">   
+  </head>
   <body>
-      <div class="default">
-          <div class="sidebar">
-            <div class="sidebar_inner">
-              <ul class="icons">
-                  <li class="link" onclick="OnLoadHome()">
+  
+  <div class="default">
+      <div class="sidebar">
+          <div class="sidebar_inner">
+            <ul class="icons">
+                <li class="link" onclick="OnLoadHome()">
+                  <div class="btn-primary tooltip">
+                    <i class="material-icons md-18 active">crop_din</i>
+                    <div class="right">
+                        <h3>Home</h3>
+                        <i></i>
+                    </div>
+                  </div>
+                </li>
+
+                <li class="link" onclick="OnLoadLogIn()">
+                  <a href="login.html">
                     <div class="btn-primary tooltip">
-                      <i class="material-icons md-18 active">crop_din</i>
+                      <i class="material-icons md-18">group</i>
                       <div class="right">
-                          <h3>Home</h3>
+                          <h3>Login</h3>
                           <i></i>
                       </div>
                   </div>
-                  </li>
-  
-                  <li class="link" onclick="OnLoadLogIn()">
-                    <a href="login.html">
-                      <div class="btn-primary tooltip">
-                        <i class="material-icons md-18">group</i>
-                        <div class="right">
-                            <h3>Login</h3>
-                            <i></i>
-                        </div>
-                    </div>
-                    </a>
-                  </li>
-  
-                  <li class="link" onclick="OnLoadLatestNews()">
-                    <a href="news.html">
-                      <div class="btn-primary tooltip">
-                        <i class="material-icons md-18">info</i>
-                        <div class="right">
-                            <h3>News</h3>
-                            <i></i>
-                        </div>
-                    </div>
-                    </a>
-                  </li>
-  
-                  <li class="link" onclick="OnLoadLatestCards()">
-                    <a href="latest-cards.html">
-                      <div class="btn-primary tooltip">
-                        <i class="material-icons md-18">pages</i>
-                        <div class="right">
-                            <h3>Cards</h3>
-                            <i></i>
-                        </div>
-                    </div>
-                    </a>
-                  </li>
-  
-                  <li class="end link">
-                    <a href="settings.html">
-                      <div class="btn-primary tooltip">
-                        <i class="material-icons md-18">settings</i>
-                        <div class="right">
-                            <h3 onclick="OnLoadSettings()">Settings</h3>
-                            <i></i>
-                        </div>
-                    </div>
-                    </a>
-  
-                  </li>
-                </ul>
-            </div>
+                  </a>
+                </li>
 
+                <li class="link" onclick="OnLoadLatestNews()">
+                  <a href="news.html">
+                    <div class="btn-primary tooltip">
+                      <i class="material-icons md-18">info</i>
+                      <div class="right">
+                          <h3>News</h3>
+                          <i></i>
+                      </div>
+                  </div>
+                  </a>
+                </li>
+
+                <li class="link" onclick="OnLoadLatestCards()">
+                  <a href="latest-cards.html">
+                    <div class="btn-primary tooltip">
+                      <i class="material-icons md-18">pages</i>
+                      <div class="right">
+                          <h3>Cards</h3>
+                          <i></i>
+                      </div>
+                  </div>
+                  </a>
+                </li>
+
+                <li class="end link">
+                  <a href="settings.html">
+                    <div class="btn-primary tooltip">
+                      <i class="material-icons md-18">settings</i>
+                      <div class="right">
+                          <h3 onclick="OnLoadSettings()">Settings</h3>
+                          <i></i>
+                      </div>
+                  </div>
+                  </a>
+
+                </li>
+              </ul>
           </div>
-          
-          <nav class="topnav">
-            <span id="logo">DeltaDex</span>
-            <ul>
-              <li onclick="OnLoadLatestCards();"><a href="">Latest Cards</a></li>
-              <li onclick="OnLoadLatestNews();">News</li>
-            </ul>
-          
-          </nav>
-          
-          <div class="main">
-            <div class="main_content">
-              <section class="content">
+      </div>
 
-                <article class="login">
-                    <h1>Sign Up</h1>
+      <nav class="topnav">
+        <span id="logo" onclick="OnLoadHome();">Deltadex</span>
+        <ul>
+          <li onclick="OnLoadLatestCards();">Latest Cards</li>
+          <li onclick="OnLoadLatestNews();">News</li>
+        </ul>
+      
+      </nav>
+      
+      <div class="main">
+        <div class="main_content">
+          <section class="content">
 
-                    <h4 class="alert">Have an account? <a href="login.html">Log in.</a></h4>
-                    
-                    <h5>Username</h5>
-                    <input type="text" />
-                    
-                    <h5>Password</h5>
-                    <input type="password" />
+            <article class="login">
+              <h1>Sign Up</h1>
 
-                    <h5>Confirm Password</h5>
-                    <input type="password" />
+              <h4 class="alert">Have an account? <a href="login.html">Log in.</a></h4>
+              
+              <h5>Username</h5>
+              <input type="text" />
+              
+              <h5>Password</h5>
+              <input type="password" />
 
-                    <a href="signup_successful.html">
-                        <button>Sign Up</button>
+              <h5>Confirm Password</h5>
+              <input type="password" />
 
-                    </a>
-                </article>
+              <a href="signup_successful.html">
+                  <button>Sign Up</button>
 
+              </a>
+            </article>
+          </section>
+      </div>      
+      </div>
+    </div>
 
-                </article>
-              </section>
+    <script>
+      function bindCallbacks() {
+        let login = document.getElementById("login");
+        login.addEventListener("click", event => OnLoadLogin());
 
-          </div>
-          
-          </div>
-          
-        </div>
-</body>
+        let links = document.getElementsByClassName("link");
+        
+        for (var i = 0; i < links.length; i++) {
+          let link = links[i];
+          link.addEventListener('click', event => OnUpdateView());
+          link.addEventListener("mouseover", event => OnUpdateCursor());
+        }
+	    }
+	  
+	    bindCallbacks();
+    </script>
+
+  </body>
 </html>
+
+

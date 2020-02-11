@@ -1,5 +1,5 @@
 # Launcher v0.1.0
-This repo comprises the source code and assets for Team 10's Launcher for the Team Project Module, 3rd Year Computer Science at UCC. 
+This repo comprises the source code and assets for the Deltadex Game Launcher.
 
 ![Live demo of the launcher in action](https://i.imgur.com/qSXiuFh.gif)
 
@@ -33,8 +33,8 @@ The following items will be completed in the coming week(s):
 2. Then, execute these commands:
 
 ```bash 
-git clone https://github.com/silvia-odwyer/game-launcher
-cd game-launcher
+git clone https://github.com/DeltadexGame/Launcher
+cd Launcher
 mkdir build
 cd build
 cmake ..
