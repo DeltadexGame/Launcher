@@ -1,11 +1,19 @@
 #include "Launcher.h"
+#include <iostream>
+using namespace std; 
 #include <AppCore/JSHelpers.h>
 #include <AppCore/App.h>
 #include <AppCore/Window.h>
 #include <AppCore/Overlay.h>
+#include <String.h>
 
-#define WINDOW_WIDTH  1100
+#define WINDOW_WIDTH 1100
 #define WINDOW_HEIGHT 800
+
+using ultralight::JSObject;
+using ultralight::JSArgs;
+using ultralight::JSFunction;
+using namespace ultralight;
 
 #include <tchar.h>
 #include <urlmon.h>
@@ -51,28 +59,17 @@ void Launcher::Run() {
 // this function gets called and depending on the button clicked,
 // the view will update accordingly.
 void Launcher::UpdateView(const JSObject& obj, const JSArgs& args) {
-  overlay_->view()->LoadURL("file:///app2.html");
-}
+  // Start of path
+  String path_to_file = "file:///";
 
-// LoadSignIn --
-void Launcher::LoadSignIn(const JSObject& obj, const JSArgs& args) {
-  overlay_->view()->LoadURL("file:///signin.html");
-}
+  // Get the name of the desired page and append to the path
+  String desired_page = args[0];
+  path_to_file += desired_page;
 
-void Launcher::LoadLogIn(const JSObject& obj, const JSArgs& args) {
-  overlay_->view()->LoadURL("file:///login.html");
-}
+  // Finally, append the file extension
+  path_to_file += ".html";
 
-void Launcher::LoadLatestCards(const JSObject& obj, const JSArgs& args) {
-  overlay_->view()->LoadURL("file:///latest-cards.html");
-}
-
-void Launcher::LoadHome(const JSObject& obj, const JSArgs& args) {
-  overlay_->view()->LoadURL("file:///app.html");
-}
-
-void Launcher::LoadLatestNews(const JSObject& obj, const JSArgs& args) {
-  overlay_->view()->LoadURL("file:///news.html");
+  overlay_->view()->LoadURL(path_to_file);
 }
 
 // Update cursor when user hovers over links
@@ -127,10 +124,6 @@ void Launcher::OnDOMReady(View* view) {
   global["OnUpdateView"] = BindJSCallback(&Launcher::UpdateView);
   global["OnUpdateCursor"] = BindJSCallback(&Launcher::UpdateCursor);
   global["GetMessage"] = BindJSCallback(&Launcher::UpdateView);
-  global["OnLoadLatestCards"] = BindJSCallback(&Launcher::LoadLatestCards);
-  global["OnLoadLatestNews"] = BindJSCallback(&Launcher::LoadLatestNews);
-  global["OnLoadLogIn"] = BindJSCallback(&Launcher::LoadLogIn);
-  global["OnLoadHome"] = BindJSCallback(&Launcher::LoadHome);
 
   JSStringRef name = JSStringCreateWithUTF8CString("OnButtonClick");
 
