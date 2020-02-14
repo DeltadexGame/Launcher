@@ -10,7 +10,7 @@
       <div class="sidebar">
           <div class="sidebar_inner">
             <ul class="icons">
-                <li class="link" onclick="OnLoadHome()">
+                <li class="link" onclick="UpdateView('home')">
                   <div class="btn-primary tooltip">
                     <i class="material-icons md-18 active">crop_din</i>
                     <div class="right">
@@ -20,7 +20,7 @@
                   </div>
                 </li>
 
-                <li class="link" onclick="OnLoadLogIn()">
+                <li class="link" onclick="UpdateView('login')">
                   <a href="login.html">
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">group</i>
@@ -32,7 +32,7 @@
                   </a>
                 </li>
 
-                <li class="link" onclick="OnLoadLatestNews()">
+                <li class="link" onclick="UpdateView('news')">
                   <a href="news.html">
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">info</i>
@@ -44,7 +44,7 @@
                   </a>
                 </li>
 
-                <li class="link" onclick="OnLoadLatestCards()">
+                <li class="link" onclick="UpdateView('latest-cards')">
                   <a href="latest-cards.html">
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">pages</i>
@@ -61,7 +61,7 @@
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">settings</i>
                       <div class="right">
-                          <h3 onclick="OnLoadSettings()">Settings</h3>
+                          <h3 onclick="UpdateView('settings')">Settings</h3>
                           <i></i>
                       </div>
                   </div>
@@ -73,10 +73,10 @@
       </div>
 
       <nav class="topnav">
-        <span id="logo" onclick="OnLoadHome();">Deltadex</span>
+        <span id="logo" onclick="UpdateView('home');">Deltadex</span>
         <ul>
-          <li onclick="OnLoadLatestCards();">Latest Cards</li>
-          <li onclick="OnLoadLatestNews();">News</li>
+          <li onclick="UpdateView('latest-cards');">Latest Cards</li>
+          <li onclick="UpdateView('news');">News</li>
         </ul>
       
       </nav>
