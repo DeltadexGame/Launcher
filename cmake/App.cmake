@@ -43,6 +43,9 @@ ExternalProject_Add(UltralightSDK
 )
 
 MACRO(ADD_APP source_list)
+  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  conan_basic_setup()
+
   set(APP_NAME ${CMAKE_PROJECT_NAME})
 
   include_directories("${ULTRALIGHT_INCLUDE_DIR}")
@@ -50,7 +53,7 @@ MACRO(ADD_APP source_list)
   link_libraries(UltralightCore AppCore Ultralight WebCore)
 
   add_executable(${APP_NAME} WIN32 MACOSX_BUNDLE ${source_list})
-
+  target_link_libraries(${APP_NAME} ${CONAN_LIBS})
   if (APPLE)
     # Enable High-DPI on macOS through our custom Info.plist template
     set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Info.plist.in) 
