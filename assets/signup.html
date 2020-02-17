@@ -93,18 +93,18 @@
               <h4 class="alert">Have an account? <a href="login.html">Log in.</a></h4>
               
               <h5>Username</h5>
-              <input type="text" />
+              <input type="text" id="username"/>
               
               <h5>Password</h5>
-              <input type="password" />
+              <input type="password" id="password"/>
 
               <h5>Confirm Password</h5>
               <input type="password" />
 
-              <a href="signup_successful.html">
-                  <button>Sign Up</button>
-
+              <a href="signup_successful.html">                  
               </a>
+              <button onclick="signUp()">Sign Up</button>
+              <p id="result"></p>
             </article>
           </section>
       </div>      
@@ -112,20 +112,27 @@
     </div>
 
     <script>
-      function bindCallbacks() {
-        let login = document.getElementById("login");
-        login.addEventListener("click", event => OnLoadLogin());
-
-        let links = document.getElementsByClassName("link");
+      function signUp() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          document.getElementById("result").innerHTML = this.status;
+          
         
-        for (var i = 0; i < links.length; i++) {
-          let link = links[i];
-          link.addEventListener('click', event => OnUpdateView());
-          link.addEventListener("mouseover", event => OnUpdateCursor());
-        }
-	    }
-	  
-	    bindCallbacks();
+          if (this.readyState == 4 && this.status == 200 || this.status == 201) {
+            document.getElementById("result").innerHTML = this.responseText;
+          }
+        };
+        xhttp.open("POST", "IP/auth/register");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        let data = `username=${username}&password=${password}`
+        xhttp.send(data);
+
+      }
+	
     </script>
 
   </body>

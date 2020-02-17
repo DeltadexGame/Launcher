@@ -98,7 +98,7 @@
               <h5>Password</h5>
               <input type="password" />
               
-              <button>Login</button>
+              <button onclick="login()">Login</button>
           </article>
           </section>
       </div>      
@@ -106,6 +106,25 @@
     </div>
 
     <script>
+      function login() {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          document.getElementById("result").innerHTML = this.status;
+        
+          if (this.readyState == 4 && this.status == 200 || this.status == 201) {
+            document.getElementById("result").innerHTML = this.responseText;
+          }
+        };
+        xhttp.open("POST", "IP/auth/login");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        let data = `username=${username}&password=${password}`
+        xhttp.send(data);
+      }
+
       function bindCallbacks() {
         let login = document.getElementById("login");
         login.addEventListener("click", event => OnLoadLogin());
