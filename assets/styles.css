@@ -287,3 +287,14 @@ ul li {
 .icons, .sidebar_inner {
     margin-left: 2vh;
 }
+
+#progress_container {
+    width: 100%;
+    background-color: #ddd;
+}
+  
+#progress_bar {
+    width: 1%;
+    height: 30px;
+    background-color: #4CAF50;
+}

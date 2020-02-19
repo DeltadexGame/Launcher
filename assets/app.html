@@ -89,8 +89,12 @@
             <article class="login">
                 <h1>Get Started</h1>
 
-                <button onclick="OnButtonClick();">Launch Game</button>
+                <button onmouseup="launch();" onmousedown="startProgressAnimation()">Launch Game</button>
                 <div id="result"></div>
+
+                <div id="progress_container">
+                  <div id="progress_bar"></div>
+                </div>
             </article>
             </article>
           </section>
@@ -99,20 +103,33 @@
     </div>
 
     <script>
-      function bindCallbacks() {
-        let login = document.getElementById("login");
-        login.addEventListener("click", event => OnLoadLogin());
+      var progress = 0;
 
-        let links = document.getElementsByClassName("link");
+      function launch() {
         
-        for (var i = 0; i < links.length; i++) {
-          let link = links[i];
-          link.addEventListener('click', event => OnUpdateView());
-          link.addEventListener("mouseover", event => OnUpdateCursor());
+        OnDownloadGame();
+      }
+
+      function startProgressAnimation() {
+        if (progress == 0) {
+          progress = 1;
+          var progress_bar = document.getElementById("progress_bar");
+          var progress_bar_width = 1;
+          var progress_interval_id = setInterval(frame, 10);
+
+          function frame() {
+            if (progress_bar_width >= 100) {
+              clearInterval(progress_interval_id);
+
+              // reset progress back to zero
+              progress = 0;
+            } else {
+              progress_bar_width++;
+              progress_bar.style.width = progress_bar_width + "%";
+            }
+          }
         }
-	    }
-	  
-	    bindCallbacks();
+      }
     </script>
 
   </body>

@@ -77,6 +77,11 @@ static size_t write_data_to_filesystem(void *pointer, size_t size, size_t nmemb,
   return is_written_to_filesystem;
 }
 
+int update_progress_bar(void* ptr, double totalToDownload, double nowDownloaded, double totalToUpload, double nowUploaded)
+{
+    return 0;
+}
+
 static void downloadCards() {
     // Set up 
     CURL *curl;
@@ -110,7 +115,8 @@ static void downloadCards() {
 }
 
 static void downloadGame(JSContextRef ctx) {
-  // Download the game. 
+
+    // Download the game. 
     // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
     // When jar files will be built of the game, the following link below will be replaced.
     CURL *curl;
@@ -133,6 +139,9 @@ static void downloadGame(JSContextRef ctx) {
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
         fp = fopen(output_filename,"wb");
         curl_easy_setopt(curl, CURLOPT_URL, url);
+
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, FALSE);
+        curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress_bar); 
 
         // Write data to the filesystem
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_to_filesystem);
@@ -185,10 +194,10 @@ void Launcher::OnResize(uint32_t width, uint32_t height) {
 void Launcher::OnFinishLoading(View* caller) {
 }
 
-JSValueRef OnButtonClick(JSContextRef ctx, JSObjectRef function,
+JSValueRef OnDownloadGame(JSContextRef ctx, JSObjectRef function,
   JSObjectRef thisObject, size_t argumentCount, 
   const JSValueRef arguments[], JSValueRef* exception) {
-  
+
   const char* str = 
     "document.getElementById('result').innerText = 'Downloading game ...'";
 
@@ -198,15 +207,9 @@ JSValueRef OnButtonClick(JSContextRef ctx, JSObjectRef function,
 
   JSStringRelease(script);
 
-  // downloadCards();
   downloadGame(ctx);
   system("start javaw -jar assets/deltadex.jar");
-
-
-	// HRESULT hr = URLDownloadToFile ( NULL, _T("https://drive.google.com/uc?export=download&id=18ObJuHnwmoLe0r09KtxU3oZyaMckWm6A"), _T("assets/deltadex.jar"), 0, NULL );
-  // Open the JAR file by executing the following command in WINDOWS.
-
-
+  
   return JSValueMakeNull(ctx);
 }
 
@@ -221,10 +224,10 @@ void Launcher::OnDOMReady(View* view) {
   global["OnUpdateCursor"] = BindJSCallback(&Launcher::UpdateCursor);
   global["GetMessage"] = BindJSCallback(&Launcher::UpdateView);
 
-  JSStringRef name = JSStringCreateWithUTF8CString("OnButtonClick");
+  JSStringRef name = JSStringCreateWithUTF8CString("OnDownloadGame");
 
   JSObjectRef function = JSObjectMakeFunctionWithCallback(context, name, 
-                                                      OnButtonClick);
+                                                      OnDownloadGame);
   
   JSObjectRef globalObj = JSContextGetGlobalObject(context);
 
