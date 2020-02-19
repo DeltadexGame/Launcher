@@ -125,6 +125,31 @@
         xhttp.send(data);
       }
 
+      
+      function validateFormData() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        if (username == "" || password == "") {
+          if (username == "") {
+            document.getElementById("err_msg").innerText = "You must provide a valid username!";
+          }
+          // no password provided
+          else {
+            document.getElementById("err_msg").innerText = "You must provide a valid password!"
+          }
+
+          return 0;
+        }
+        else if (password != confirm_password) {
+          document.getElementById("err_msg").innerText = "Passwords don't match!"
+          return 0;
+        }
+        else {
+          return 1;
+        }
+      }
+
       function bindCallbacks() {
         let login = document.getElementById("login");
         login.addEventListener("click", event => OnLoadLogin());

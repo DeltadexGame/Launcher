@@ -114,7 +114,6 @@ static void downloadGame(JSContextRef ctx) {
     // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
     // When jar files will be built of the game, the following link below will be replaced.
     CURL *curl;
-    struct curl_slist *headers = NULL;
     FILE *fp;
     CURLcode res;
 
@@ -126,8 +125,6 @@ static void downloadGame(JSContextRef ctx) {
 
     // Code adapated from libcurl website: https://curl.haxx.se/libcurl/c/url2file.html
     curl = curl_easy_init();
-
-    // headers = curl_slist_append(headers, "Accept: application/zip");
 
     // curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     if (curl)

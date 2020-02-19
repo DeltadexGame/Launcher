@@ -99,12 +99,13 @@
               <input type="password" id="password"/>
 
               <h5>Confirm Password</h5>
-              <input type="password" />
+              <input type="password" id="confirm_password" />
 
               <a href="signup_successful.html">                  
               </a>
               <button onclick="signUp()">Sign Up</button>
               <p id="result"></p>
+              <p id="err_msg"></p>
             </article>
           </section>
       </div>      
@@ -116,7 +117,6 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
           document.getElementById("result").innerHTML = this.status;
-          
         
           if (this.readyState == 4 && this.status == 200 || this.status == 201) {
             document.getElementById("result").innerHTML = this.responseText;
@@ -125,12 +125,41 @@
         xhttp.open("POST", "IP/auth/register");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
+        let res = validateFormData();
+
+        if (res == 1) {
+          document.getElementById("err_msg").innerText = "";
+          // both username and password provided, so send call.
+          let data = `username=${username}&password=${password}`
+          xhttp.send(data);
+        }
+      }
+
+      // returns 1 if form data is valid
+      function validateFormData() {
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
+        var confirm_password = document.getElementById("confirm_password").value;
 
-        let data = `username=${username}&password=${password}`
-        xhttp.send(data);
+        if (username == "" || password == "") {
+          if (username == "") {
+            document.getElementById("err_msg").innerText = "You must provide a valid username!";
+          }
+          // no password provided
+          else {
+            document.getElementById("err_msg").innerText = "You must provide a valid password!"
+          }
 
+          return 0;
+        }
+        else if (password != confirm_password) {
+          document.getElementById("err_msg").innerText = "Passwords don't match!"
+          return 0;
+        }
+        else {
+          // all form data is valid
+          return 1;
+        }
       }
 	
     </script>
