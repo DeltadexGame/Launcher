@@ -109,6 +109,65 @@ static void downloadCards() {
     }
 }
 
+static void downloadGame(JSContextRef ctx) {
+  // Download the game. 
+    // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
+    // When jar files will be built of the game, the following link below will be replaced.
+    CURL *curl;
+    struct curl_slist *headers = NULL;
+    FILE *fp;
+    CURLcode res;
+
+    // Initialize URL which contains card
+    const char *url = "https://raw.githubusercontent.com/michealodwyer26/Amid-The-Ruins-Of-Aspic/master/Amid%20The%20Ruins%20Of%20Aspic.jar";
+
+    // Initialize output filename 
+    char output_filename[FILENAME_MAX] = "assets/deltadex.jar";
+
+    // Code adapated from libcurl website: https://curl.haxx.se/libcurl/c/url2file.html
+    curl = curl_easy_init();
+
+    // headers = curl_slist_append(headers, "Accept: application/zip");
+
+    // curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    if (curl)
+    {
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        fp = fopen(output_filename,"wb");
+        curl_easy_setopt(curl, CURLOPT_URL, url);
+
+        // Write data to the filesystem
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_to_filesystem);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+        res = curl_easy_perform(curl);
+
+        // if there was an error in the download, report to the user
+        if(res != CURLE_OK) {
+          const char* str = "document.getElementById('result').innerText = 'Error ...'";
+
+          JSStringRef script = JSStringCreateWithUTF8CString(str);
+
+          JSEvaluateScript(ctx, script, 0, 0, 0, 0);
+
+          JSStringRelease(script);
+        }
+
+        /* cleanup resources */
+        curl_easy_cleanup(curl);
+        fclose(fp);
+
+        const char* str = 
+          "document.getElementById('result').innerText = 'Finished downloading game.'";
+
+        JSStringRef script = JSStringCreateWithUTF8CString(str);
+
+        JSEvaluateScript(ctx, script, 0, 0, 0, 0);
+
+        JSStringRelease(script);
+    }
+}
+
 // Update cursor when user hovers over links
 void Launcher::UpdateCursor(const JSObject& obj, const JSArgs& args) {
   Cursor cursor = Cursor::kCursor_Pointer;
@@ -134,7 +193,7 @@ JSValueRef OnButtonClick(JSContextRef ctx, JSObjectRef function,
   const JSValueRef arguments[], JSValueRef* exception) {
   
   const char* str = 
-    "document.getElementById('result').innerText = 'Launching game ...'";
+    "document.getElementById('result').innerText = 'Downloading game ...'";
 
   JSStringRef script = JSStringCreateWithUTF8CString(str);
 
@@ -142,10 +201,11 @@ JSValueRef OnButtonClick(JSContextRef ctx, JSObjectRef function,
 
   JSStringRelease(script);
 
-  downloadCards();
-  // Download the game. 
-  // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
-  // When jar files will be built of the game, the following link below will be replaced.
+  // downloadCards();
+  downloadGame(ctx);
+  system("start javaw -jar assets/deltadex.jar");
+
+
 	// HRESULT hr = URLDownloadToFile ( NULL, _T("https://drive.google.com/uc?export=download&id=18ObJuHnwmoLe0r09KtxU3oZyaMckWm6A"), _T("assets/deltadex.jar"), 0, NULL );
   // Open the JAR file by executing the following command in WINDOWS.
 
