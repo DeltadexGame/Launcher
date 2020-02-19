@@ -30,21 +30,24 @@ The following items will be completed in the coming week(s):
 
 1. To build this application, you'll need to [install the prerequisites required for Ultralight](https://docs.ultralig.ht/docs/installing-prerequisites).
 
-2. Then, execute these commands:
+2. Download the Conan package manager. This is required for getting the dependencies required.
+
+3. Then, execute these commands:
 
 ```bash 
 git clone https://github.com/DeltadexGame/Launcher
 cd Launcher
 mkdir build
 cd build
+conan install ..
 cmake ..
 cmake --build . --config Release
 ```
 
 > **Important Note**: If you would like CMake to generate 64-bit applications on Windows, then execute the following: `cmake .. -DCMAKE_GENERATOR_PLATFORM=x64` instead of `cmake ..`
 
-3. Run the Launcher:
+4. Run the Launcher:
 
-**Windows**: Navigate to `game-launcher/build/Release` and locate the `Launcher.exe` executable and run.
+**Windows**: Navigate to `Launcher/build/bin` and locate the `Launcher.exe` executable and run.
 
-**Linux or macOS**: Navigate to `game-launcher/build` and locate the Launcher executable to run. 
+**Linux or macOS**: Navigate to `Launcher/build` and locate the Launcher executable to run. 
