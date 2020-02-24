@@ -44,6 +44,15 @@ cmake ..
 cmake --build . --config Release
 ```
 
+OR 
+
+Execute the `build.sh` script after giving execute permissions:
+
+```bash
+chmod +x build.sh
+./build.sh
+```
+
 > **Important Note**: If you would like CMake to generate 64-bit applications on Windows, then execute the following: `cmake .. -DCMAKE_GENERATOR_PLATFORM=x64` instead of `cmake ..`
 
 4. Run the Launcher:
