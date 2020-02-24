@@ -13,7 +13,7 @@ and latest cards screens. Animations were also used, which I planned to convert 
 Initially, I decided to use Rust's `webview` crate, which would allow the application to utilize the user system's webview, 
 but high DPI was not supported, so I reconsidered other options that supported high DPI.
 
-Electron tends to lead to bloated file size and has performance issues. I wanted a lightweight solution which would promise both speed and high-performance, as well as small size. 
+Electron tends to lead to a bloated binary file size and has performance issues. I wanted a lightweight solution which would promise both speed and high-performance, as well as small size. 
 
 I moved to Ultralight, which allows for the above. It allowed me to create the HTML/CSS/JS frontend, and then manage JS callbacks 
 with C++ for native tasks, such as executing the game's JAR file, etc., 

@@ -23,6 +23,8 @@ public:
 
   virtual void UpdateView(const JSObject& obj, const JSArgs& args);
 
+  virtual void SignUp(const JSObject& obj, const JSArgs& args);
+
   virtual void UpdateCursor(const JSObject& obj, const JSArgs& args);
 
   virtual void OnDOMReady(View* caller) override;
