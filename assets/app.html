@@ -91,6 +91,7 @@
 
                 <button onmouseup="launch();" onmousedown="startProgressAnimation()">Launch Game</button>
                 <div id="result"></div>
+                <div class="lds-ripple" id="loading_anim"><div></div><div></div></div>
 
                 <div id="progress_container">
                   <div id="progress_bar"></div>
@@ -111,6 +112,7 @@
       }
 
       function startProgressAnimation() {
+
         if (progress == 0) {
           progress = 1;
           var progress_bar = document.getElementById("progress_bar");

@@ -5,7 +5,7 @@
 
 #include "Launcher.h"
 #include <iostream>
-#include <String.h>
+#include <string>
 
 #include "curl/curl.h"
 #define WINDOW_WIDTH 1100
@@ -140,7 +140,7 @@ static void downloadGame(JSContextRef ctx) {
         fp = fopen(output_filename,"wb");
         curl_easy_setopt(curl, CURLOPT_URL, url);
 
-        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, FALSE);
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
         curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress_bar); 
 
         // Write data to the filesystem
