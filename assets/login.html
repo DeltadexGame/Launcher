@@ -93,12 +93,12 @@
               <h4 class="alert">Don't have an account? <a href="signup.html">Sign up.</a></h4>
               
               <h5>Username</h5>
-              <input type="text" />
+              <input type="text" id="username" />
               
               <h5>Password</h5>
-              <input type="password" />
+              <input type="password" id="password"/>
               
-              <button onclick="login()">Login</button>
+              <button onclick="login_c()">Login</button>
           </article>
           </section>
       </div>      
@@ -161,7 +161,13 @@
           link.addEventListener('click', event => OnUpdateView());
           link.addEventListener("mouseover", event => OnUpdateCursor());
         }
-	    }
+      }
+      
+      function login_c() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        Login(username, password);
+      }
 	  
 	    bindCallbacks();
     </script>

@@ -79,6 +79,78 @@ inline std::string ToUTF8(const ultralight::String& str) {
   return std::string(utf8.data(), utf8.length());
 }
 
+void Launcher::Login(const JSObject& obj, const JSArgs& args) {
+  
+
+  CURL *curl;
+  CURLcode res;
+ 
+  /* In windows, this will init the winsock stuff */ 
+  curl_global_init(CURL_GLOBAL_ALL);
+ 
+  /* get a curl handle */ 
+  curl = curl_easy_init();
+  if(curl) {
+
+    curl_easy_setopt(curl, CURLOPT_URL, "http://185.49.60.100/auth/login");
+    String username_string = args[0];
+    String password_string = args[1];
+
+    std::string username = ToUTF8(username_string);
+    std::string password = ToUTF8(password_string);
+
+    char * username_cstr = new char [username.length()+1];
+    std::strcpy (username_cstr, username.c_str());
+
+    char * password_cstr = new char [password.length()+1];
+    std::strcpy (password_cstr, password.c_str());
+
+
+    // Create JSON data
+    char json_str[80];
+    strcpy (json_str,"{\"username\" : \"");
+    strcat (json_str, username_cstr);
+    strcat (json_str, "\", \"password\" : \"");
+    strcat (json_str, password_cstr);
+    strcat (json_str, "\"}");
+
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_str);
+
+    // Set headers
+    struct curl_slist *headers = NULL;
+    headers = curl_slist_append(headers, "Accept: application/json");
+    // Set content type 
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+
+    // Set utf8
+    headers = curl_slist_append(headers, "charsets: utf-8");
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers); 
+
+    res = curl_easy_perform(curl);
+
+        if(res != CURLE_OK) {
+          overlay_->view()->LoadURL("file:///signup-error.html");
+
+        }
+
+        else {
+          long response_code;
+
+          curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+          if (response_code == 403) {
+            overlay_->view()->LoadURL("file:///login-error.html");
+          } 
+          else if (response_code == 200) {
+            overlay_->view()->LoadURL("file:///login-successful.html");
+          }
+
+        }
+ 
+    curl_easy_cleanup(curl);
+  }
+  curl_global_cleanup();
+}
+
 void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
 
   CURL *curl;
@@ -376,6 +448,7 @@ void Launcher::OnDOMReady(View* view) {
   global["OnUpdateCursor"] = BindJSCallback(&Launcher::UpdateCursor);
   global["GetMessage"] = BindJSCallback(&Launcher::UpdateView);
   global["SignUp"] = BindJSCallback(&Launcher::SignUp);
+  global["Login"] = BindJSCallback(&Launcher::Login);
 
 
   JSStringRef name = JSStringCreateWithUTF8CString("OnDownloadGame");

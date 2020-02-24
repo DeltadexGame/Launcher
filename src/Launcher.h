@@ -25,6 +25,8 @@ public:
 
   virtual void SignUp(const JSObject& obj, const JSArgs& args);
 
+  virtual void Login(const JSObject& obj, const JSArgs& args);
+
   virtual void UpdateCursor(const JSObject& obj, const JSArgs& args);
 
   virtual void OnDOMReady(View* caller) override;
