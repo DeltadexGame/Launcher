@@ -21,8 +21,6 @@ public:
 
   virtual void OnFinishLoading(View* caller) override;
 
-  virtual void UpdateView(const JSObject& obj, const JSArgs& args);
-
   virtual void SignUp(const JSObject& obj, const JSArgs& args);
 
   virtual void Login(const JSObject& obj, const JSArgs& args);

@@ -57,23 +57,6 @@ void Launcher::Run() {
   app_->Run();
 }
 
-// When the user clicks a button to switch views, 
-// this function gets called and depending on the button clicked,
-// the view will update accordingly.
-void Launcher::UpdateView(const JSObject& obj, const JSArgs& args) {
-  // Start of path
-  String path_to_file = "file:///";
-
-  // Get the name of the desired page and append to the path
-  String desired_page = args[0];
-  path_to_file += desired_page;
-
-  // Finally, append the file extension
-  path_to_file += ".html";
-
-  overlay_->view()->LoadURL(path_to_file);
-}
-
 inline std::string ToUTF8(const ultralight::String& str) {
   ultralight::String8 utf8 = str.utf8();
   return std::string(utf8.data(), utf8.length());
@@ -444,9 +427,7 @@ void Launcher::OnDOMReady(View* view) {
   JSContextRef context = view->js_context();
   JSObject global = JSGlobalObject();
 
-  global["OnUpdateView"] = BindJSCallback(&Launcher::UpdateView);
   global["OnUpdateCursor"] = BindJSCallback(&Launcher::UpdateCursor);
-  global["GetMessage"] = BindJSCallback(&Launcher::UpdateView);
   global["SignUp"] = BindJSCallback(&Launcher::SignUp);
   global["Login"] = BindJSCallback(&Launcher::Login);
 
