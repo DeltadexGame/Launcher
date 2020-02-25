@@ -91,6 +91,10 @@
 
                 <button onmouseup="launch();" onmousedown="startProgressAnimation()">Launch Game</button>
                 <div id="result"></div>
+
+                <div id="results">
+
+                </div>
                 <div class="lds-ripple" id="loading_anim"><div></div><div></div></div>
 
                 <div id="progress_container">
@@ -107,8 +111,29 @@
       var progress = 0;
 
       function launch() {
-        
-        OnDownloadGame();
+        document.getElementById("result").innerHTML = "";
+
+        appendNewStatus("Downloading images ...");
+
+        setTimeout(function () {OnDownloadGame(); }, 400);
+        setTimeout(function () { startProgressAnimation();}, 100);
+        setTimeout(function () { appendNewStatus("Downloading images ...");}, 100);
+        setTimeout(function () { appendNewStatus("Downloading files ...");}, 250);
+        setTimeout(function () { appendNewStatus("Downloading assets ...");}, 350);
+        setTimeout(function () { appendNewStatus("Executing ...");}, 500);
+
+      }
+
+      function updateStatus(status) {
+        document.getElementById("result").innerHTML = status;
+
+      }
+
+      function appendNewStatus(status) {
+        let new_status = document.createElement("p");
+        new_status.innerHTML = status;
+        let results = document.getElementById("results");
+        results.appendChild(new_status);
       }
 
       function startProgressAnimation() {
