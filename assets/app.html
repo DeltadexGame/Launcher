@@ -89,8 +89,9 @@
             <article class="login">
                 <h1>Get Started</h1>
 
-                <button onmouseup="launch();" onmousedown="startProgressAnimation()">Launch Game</button>
+                <button onmouseup="launch();">Launch Game</button>
                 <div id="result"></div>
+                <p id="auth"></p>
 
                 <div id="results">
 
@@ -111,17 +112,25 @@
       var progress = 0;
 
       function launch() {
-        document.getElementById("result").innerHTML = "";
+        var is_logged_in = VerifyAuth();
 
-        appendNewStatus("Downloading images ...");
+        if (is_logged_in == true) {
+          document.getElementById("result").innerHTML = "";
 
-        setTimeout(function () {OnDownloadGame(); }, 400);
-        setTimeout(function () { startProgressAnimation();}, 100);
-        setTimeout(function () { appendNewStatus("Downloading images ...");}, 100);
-        setTimeout(function () { appendNewStatus("Downloading files ...");}, 250);
-        setTimeout(function () { appendNewStatus("Downloading assets ...");}, 350);
-        setTimeout(function () { appendNewStatus("Executing ...");}, 500);
+          appendNewStatus("Downloading images ...");
 
+          setTimeout(function () {OnDownloadGame()}, 400);
+          setTimeout(function () { startProgressAnimation();}, 100);
+          setTimeout(function () { appendNewStatus("Downloading images ...");}, 100);
+          setTimeout(function () { appendNewStatus("Downloading files ...");}, 250);
+          setTimeout(function () { appendNewStatus("Downloading assets ...");}, 350);
+          setTimeout(function () { startProgressAnimation();}, 350);
+          setTimeout(function () { appendNewStatus("Executing ...");}, 500);
+        }
+        else {
+          document.getElementById("result").innerHTML = "Not logged in!";
+
+        }
       }
 
       function updateStatus(status) {

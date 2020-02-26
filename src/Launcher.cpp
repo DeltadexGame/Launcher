@@ -104,6 +104,11 @@ static size_t write_data_to_filesystem(void *pointer, size_t size, size_t nmemb,
   return is_written_to_filesystem;
 }
 
+JSValue Launcher::VerifyAuth(const JSObject& obj, const JSArgs& args) {
+  bool is_user_logged_in = is_logged_in();
+  return JSValue(is_user_logged_in);
+}
+
 void Launcher::Login(const JSObject& obj, const JSArgs& args) {
   CURL *curl;
   CURLcode res;
@@ -247,6 +252,17 @@ void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
   curl_global_cleanup();
 }
 
+void Launcher::Logout(const JSObject& obj, const JSArgs& args) {
+  FILE *fp;
+  char filename[FILENAME_MAX] = "response.json";
+
+  std::ifstream file(filename);
+
+  if (file_exists(filename)) {
+    // clear the file's authentication details.
+    fp = fopen(filename,"w");
+  }
+}
 
 void Launcher::OnStart() {
   bool logged_in = is_logged_in();
@@ -415,5 +431,8 @@ void Launcher::OnDOMReady(View* view) {
   global["SignUp"] = BindJSCallback(&Launcher::SignUp);
   global["Login"] = BindJSCallback(&Launcher::Login);
   global["OnDownloadGame"] = BindJSCallback(&Launcher::OnDownloadGame);
+  global["VerifyAuth"] = BindJSCallbackWithRetval(&Launcher::VerifyAuth);
+  global["Logout"] = BindJSCallback(&Launcher::Logout);
 
+  view->EvaluateScript("display()");
 }

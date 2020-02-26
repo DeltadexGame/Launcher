@@ -33,6 +33,10 @@ public:
 
   virtual void UpdateCursor(const JSObject& obj, const JSArgs& args);
 
+  virtual JSValue VerifyAuth(const JSObject& obj, const JSArgs& args);
+  
+  virtual void Logout(const JSObject& obj, const JSArgs& args);
+
   virtual void OnDOMReady(View* caller) override;
 
 protected:

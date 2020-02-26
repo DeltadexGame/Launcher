@@ -87,7 +87,7 @@
         <div class="main_content">
           <section class="content">
 
-            <article class="login">
+            <article id="login" style="display: none;">
               <h1>Login</h1>
 
               <h4 class="alert">Don't have an account? <a href="signup.html">Sign up.</a></h4>
@@ -100,31 +100,39 @@
               
               <button onclick="login_c()">Login</button>
           </article>
+
+          <article id="logged-in" style="display: none;">
+            <h1>Logged In</h1>
+
+            <h4 class="alert">You're already logged in!</h4>
+            
+            <p>Want to logout?</p>
+            <button onclick="logout()">Logout</button>
+        </article>
+        <p id="logout_msg"></p>
           </section>
       </div>      
       </div>
     </div>
 
     <script>
-      function login() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          document.getElementById("result").innerHTML = this.status;
-        
-          if (this.readyState == 4 && this.status == 200 || this.status == 201) {
-            document.getElementById("result").innerHTML = this.responseText;
-          }
-        };
-        xhttp.open("POST", "IP/auth/login");
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-        var username = document.getElementById("username").value;
-        var password = document.getElementById("password").value;
+      function display() {
+        var is_logged_in = VerifyAuth();
+        if (is_logged_in) {
+          document.getElementById("logged-in").style.display = "inline";
 
-        let data = `username=${username}&password=${password}`
-        xhttp.send(data);
+        }
+        else {
+          document.getElementById("login").style.display = "inline";
+        }
       }
 
+      function logout() {
+        Logout();
+        document.getElementById("logged-in").style.display = "none";
+        document.getElementById("logout_msg").innerHTML = "Logged out successfully."
+      }
       
       function validateFormData() {
         var username = document.getElementById("username").value;
