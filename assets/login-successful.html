@@ -63,7 +63,7 @@
                     <div class="btn-primary tooltip">
                       <i class="material-icons md-18">settings</i>
                       <div class="right">
-                          <h3 onclick="UpdateView('settings')">Settings</h3>
+                          <h3>Settings</h3>
                           <i></i>
                       </div>
                   </div>
@@ -75,7 +75,7 @@
       </div>
 
       <nav class="topnav">
-        <span id="logo" onclick="UpdateView('home');">Deltadex</span>
+        <span id="logo">Deltadex</span>
         <ul>
           <li>Latest Cards</li>
           <li>News</li>
@@ -92,10 +92,21 @@
 
                     <h3>You've logged-in successfully.</h3>
 
-                    <button>Launch Game</button>
+                    <button onclick="launch()"  onmousedown="startProgressAnimation()">Launch Game</button>
+
+                    <div id="result"></div>
+
+                    <div id="results">
+
+                    </div>
+                    <div class="lds-ripple" id="loading_anim"><div></div><div></div></div>
+
+                    <div id="progress_container">
+                      <div id="progress_bar"></div>
+                    </div>
+
+
                 </article>
-
-
                 </article>
               </section>
       </div>      
@@ -103,8 +114,54 @@
     </div>
 
     <script>
+    function launch() {
+        document.getElementById("result").innerHTML = "";
 
-	
+        appendNewStatus("Downloading images ...");
+
+        setTimeout(function () {OnDownloadGame(); }, 400);
+        setTimeout(function () { startProgressAnimation();}, 100);
+        setTimeout(function () { appendNewStatus("Downloading images ...");}, 100);
+        setTimeout(function () { appendNewStatus("Downloading files ...");}, 250);
+        setTimeout(function () { appendNewStatus("Downloading assets ...");}, 350);
+        setTimeout(function () { appendNewStatus("Executing ...");}, 500);
+
+      }
+
+      function updateStatus(status) {
+        document.getElementById("result").innerHTML = status;
+
+      }
+
+      function appendNewStatus(status) {
+        let new_status = document.createElement("p");
+        new_status.innerHTML = status;
+        let results = document.getElementById("results");
+        results.appendChild(new_status);
+      }
+
+      function startProgressAnimation() {
+
+        if (progress == 0) {
+          progress = 1;
+          var progress_bar = document.getElementById("progress_bar");
+          var progress_bar_width = 1;
+          var progress_interval_id = setInterval(frame, 10);
+
+          function frame() {
+            if (progress_bar_width >= 100) {
+              clearInterval(progress_interval_id);
+
+              // reset progress back to zero
+              progress = 0;
+            } else {
+              progress_bar_width++;
+              progress_bar.style.width = progress_bar_width + "%";
+            }
+          }
+        }
+      }
+
     </script>
 
   </body>

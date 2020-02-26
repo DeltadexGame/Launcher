@@ -66,6 +66,38 @@ inline std::string convert_to_utf8(const ultralight::String& str) {
   return std::string(utf8.data(), utf8.length());
 }
 
+bool file_exists (const std::string& filename) {
+  // check if file exists on the filesystem or not by opening for reading.
+  if (FILE *fp = fopen(filename.c_str(), "r")) {
+    // file exists
+    fclose(fp);
+    return true;
+  } 
+  // file does not exist, so return false.
+  return false; 
+}
+
+bool is_logged_in()
+{   
+  char filename[FILENAME_MAX] = "response.json";
+
+  // create a stream
+  std::ifstream file(filename);
+
+  // if file contains a response JSON object, user is logged in. 
+  // if file is empty, user not logged in. 
+  if (file_exists(filename)) {
+    if (file.peek() == std::ifstream::traits_type::eof() == true) {
+      return false;
+    }
+    // file contains a response object
+    return true;
+  }
+
+  // file does not exist
+  return false;
+}
+
 static size_t write_data_to_filesystem(void *pointer, size_t size, size_t nmemb, void *stream)
 {
   size_t is_written_to_filesystem = fwrite(pointer, size, nmemb, (FILE *)stream);
@@ -83,7 +115,6 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
   /* get a curl handle */ 
   curl = curl_easy_init();
   if(curl) {
-
     curl_easy_setopt(curl, CURLOPT_URL, "http://185.49.60.100/auth/login");
     String username_string = args[0];
     String password_string = args[1];
@@ -97,6 +128,7 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
     char * password_cstr = new char [password.length()+1];
     std::strcpy (password_cstr, password.c_str());
     
+    long response_code;
     // Create JSON data
     char json_str[80];
     strcpy (json_str,"{\"username\" : \"");
@@ -129,23 +161,22 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
     // Perform request
     res = curl_easy_perform(curl);
 
-        if(res != CURLE_OK) {
-          overlay_->view()->LoadURL("file:///signup-error.html");
-        }
+    if(res == CURLE_OK) {
 
-        else {
-          long response_code;
-          curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-          if (response_code == 403) {
-            overlay_->view()->LoadURL("file:///login-error.html");
-          } 
-          else if (response_code == 200) {
-            
-            overlay_->view()->LoadURL("file:///login-successful.html");
-          }
-        }
+      curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+      if (response_code == 200) {
+        overlay_->view()->LoadURL("file:///login-successful.html");
+      } 
+    }
     fclose(file);
     curl_easy_cleanup(curl);
+
+    if (response_code != 200) {
+      // clear the file; opening file for writing will clear it of its contents.
+      // if a file is cleared, user is not logged in.
+      fopen(output_filename, "w");
+      overlay_->view()->LoadURL("file:///login-error.html");
+    } 
   }
   curl_global_cleanup();
 }
@@ -201,7 +232,6 @@ void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
 
     if(res != CURLE_OK) {
       overlay_->view()->LoadURL("file:///signup-error.html");
-
     }
 
     else {
@@ -215,6 +245,19 @@ void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
     curl_easy_cleanup(curl);
   }
   curl_global_cleanup();
+}
+
+
+void Launcher::OnStart() {
+  bool logged_in = is_logged_in();
+
+  if (logged_in) {
+    overlay_->view()->LoadURL("file:///login.html");
+  }
+  else {
+    overlay_->view()->LoadURL("file:///login.html");
+  }
+  overlay_->view()->LoadURL("file:///login.html");
 }
 
 int update_progress_bar(void* ptr, double totalToDownload, double nowDownloaded, double totalToUpload, double nowUploaded)
@@ -254,69 +297,64 @@ static void downloadCards() {
     }
 }
 
-static void downloadGame(JSContextRef ctx) {
-    // Download the game. 
-    // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
-    // When jar files will be built of the game, the following link below will be replaced.
-    CURL *curl;
-    FILE *fp;
-    CURLcode res;
+static void downloadGame() {
 
-    // Initialize URL which contains card
-    const char *url = "https://github.com/DeltadexGame/Client/releases/download/1.0/desktop-1.0.jar";
+  // Download the game. 
+  // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
+  // When jar files will be built of the game, the following link below will be replaced.
+  CURL *curl;
+  FILE *fp;
+  CURLcode res;
 
-    // Initialize output filename 
-    char output_filename[FILENAME_MAX] = "assets/deltadex.jar";
+  // Initialize URL which contains card
+  const char *url = "https://github.com/DeltadexGame/Client/releases/download/1.0/desktop-1.0.jar";
 
-    // Code adapated from libcurl website: https://curl.haxx.se/libcurl/c/url2file.html
-    curl = curl_easy_init();
+  // Initialize output filename 
+  char output_filename[FILENAME_MAX] = "assets/deltadex.jar";
 
-    // curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    if (curl)
-    {
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-        fp = fopen(output_filename, "wb");
-        curl_easy_setopt(curl, CURLOPT_URL, url);
-        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
-        curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress_bar); 
+  // Code adapated from libcurl website: https://curl.haxx.se/libcurl/c/url2file.html
+  curl = curl_easy_init();
 
-        // Write data to the filesystem
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_to_filesystem);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-        res = curl_easy_perform(curl);
+  // curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+  if (curl)
+  {
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+    fp = fopen(output_filename, "wb");
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
+    curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress_bar); 
 
-        // if there was an error in the download, report to the user
-        if(res != CURLE_OK) {
-          const char* str = "document.getElementById('result').innerText = 'Error ...'";
+    // Write data to the filesystem
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_to_filesystem);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+    res = curl_easy_perform(curl);
 
-          JSStringRef script = JSStringCreateWithUTF8CString(str);
-
-          JSEvaluateScript(ctx, script, 0, 0, 0, 0);
-
-          JSStringRelease(script);
-        }
-
-        /* cleanup resources */
-        curl_easy_cleanup(curl);
-        fclose(fp);
-
-        const char* str = 
-          "document.getElementById('result').innerText = 'Finished downloading game.'";
-
-        JSStringRef script = JSStringCreateWithUTF8CString(str);
-
-        JSEvaluateScript(ctx, script, 0, 0, 0, 0);
-
-        JSStringRelease(script);
+    // if there was an error in the download, report to the user
+    if(res != CURLE_OK) {
     }
+
+    /* cleanup resources */
+    curl_easy_cleanup(curl);
+    fclose(fp);
+
+  }
 }
 
 // Update cursor when user hovers over links
 void Launcher::UpdateCursor(const JSObject& obj, const JSArgs& args) {
   Cursor cursor = Cursor::kCursor_Pointer;
   window_->SetCursor(cursor);
+}
+
+// Update cursor when user hovers over links
+void Launcher::DisplayPage(std::string filename) {
+  char * filename_cstr = new char [filename.length()+1];
+  std::strcpy (filename_cstr, filename.c_str());
+
+  String filename_ultralight_str = ultralight::String(filename_cstr);
+  overlay_->view()->LoadURL(filename_ultralight_str);
 }
 
 // Clean up resources here
@@ -333,44 +371,39 @@ void Launcher::OnResize(uint32_t width, uint32_t height) {
 void Launcher::OnFinishLoading(View* caller) {
 }
 
-JSValueRef OnDownloadGame(JSContextRef ctx, JSObjectRef function,
-  JSObjectRef thisObject, size_t argumentCount, 
-  const JSValueRef arguments[], JSValueRef* exception) {
+void Launcher::OnDownloadGame(const JSObject& obj, const JSArgs& args) {
+  bool isLoggedIn = is_logged_in();
 
-  const char* str = 
-    "document.getElementById('result').innerText = 'Downloading game ...'";
+  if (isLoggedIn) {
 
-  JSStringRef script = JSStringCreateWithUTF8CString(str);
+    downloadGame();
 
-  JSEvaluateScript(ctx, script, 0, 0, 0, 0);
+    std::ifstream response("response.json", std::ifstream::binary);
+    Json::Value json_obj;
 
-  JSStringRelease(script);
+    response >> json_obj;
 
-  downloadGame(ctx);
+    Json::Value content = json_obj["content"];
 
-  std::ifstream response("response.json", std::ifstream::binary);
-  Json::Value json_obj;
+    Json::Value username = content["username"];
+    std::string token = content["token"].asString();
 
-  response >> json_obj;
+    std::string command = "start javaw -jar assets/deltadex.jar ";
 
-  Json::Value content = json_obj["content"];
+    // Append token 
+    command += token;
 
-  Json::Value username = content["username"];
-  std::string token = content["token"].asString();
+    char * command_cstr = new char [command.length()+1];
+    std::strcpy (command_cstr, command.c_str());
+    
+    system(command_cstr);
+  }
 
-  std::string command = "start javaw -jar assets/deltadex.jar ";
+  else {
+    DisplayPage("file:///login.html");
+  }
 
-  // Append token 
-  command += token;
-
-  char * command_cstr = new char [command.length()+1];
-  std::strcpy (command_cstr, command.c_str());
-  
-  system(command_cstr);
-  
-  return JSValueMakeNull(ctx);
 }
-
 
 // When the DOM is ready and has finished loading, bind JS callbacks here. 
 void Launcher::OnDOMReady(View* view) {
@@ -381,15 +414,6 @@ void Launcher::OnDOMReady(View* view) {
   global["OnUpdateCursor"] = BindJSCallback(&Launcher::UpdateCursor);
   global["SignUp"] = BindJSCallback(&Launcher::SignUp);
   global["Login"] = BindJSCallback(&Launcher::Login);
+  global["OnDownloadGame"] = BindJSCallback(&Launcher::OnDownloadGame);
 
-  JSStringRef name = JSStringCreateWithUTF8CString("OnDownloadGame");
-
-  JSObjectRef function = JSObjectMakeFunctionWithCallback(context, name, 
-                                                      OnDownloadGame);
-  
-  JSObjectRef globalObj = JSContextGetGlobalObject(context);
-
-  JSObjectSetProperty(context, globalObj, name, function, 0, 0);
-
-  JSStringRelease(name);
 }
