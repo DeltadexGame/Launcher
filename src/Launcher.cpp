@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include <malloc.h>
+#include "json/json.h"
 
 #include <cstring>
 #include "curl/curl.h"
@@ -62,12 +63,28 @@ inline std::string ToUTF8(const ultralight::String& str) {
   return std::string(utf8.data(), utf8.length());
 }
 
+
+
+static size_t write_data_to_filesystem(void *pointer, size_t size, size_t nmemb, void *stream)
+{
+  size_t is_written_to_filesystem = fwrite(pointer, size, nmemb, (FILE *)stream);
+  return is_written_to_filesystem;
+}
+
+static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
+{
+    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+
+
 void Launcher::Login(const JSObject& obj, const JSArgs& args) {
   
 
   CURL *curl;
   CURLcode res;
- 
+  FILE *file;
+
   /* In windows, this will init the winsock stuff */ 
   curl_global_init(CURL_GLOBAL_ALL);
  
@@ -87,8 +104,7 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
 
     char * password_cstr = new char [password.length()+1];
     std::strcpy (password_cstr, password.c_str());
-
-
+    
     // Create JSON data
     char json_str[80];
     strcpy (json_str,"{\"username\" : \"");
@@ -98,6 +114,27 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
     strcat (json_str, "\"}");
 
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_str);
+    // std::string readBuffer;
+
+    // readBuffer.clear();
+    // curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    // curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+
+        char output_filename[FILENAME_MAX] = "response.txt";
+
+  
+        file = fopen(output_filename,"w");
+
+        if (file) {
+  // Write data to the filesystem
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_to_filesystem);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
+
+
+        }
+
+
+      
 
     // Set headers
     struct curl_slist *headers = NULL;
@@ -109,6 +146,7 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
     headers = curl_slist_append(headers, "charsets: utf-8");
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers); 
 
+    // Perform request
     res = curl_easy_perform(curl);
 
         if(res != CURLE_OK) {
@@ -117,6 +155,19 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
         }
 
         else {
+          const std::string rawJson = "({"Age": 20, "Name": "colin"})";
+  const auto rawJsonLength = static_cast<int>(rawJson.length());
+  constexpr bool shouldUseOldWay = false;
+  JSONCPP_STRING err;
+  Json::Value root;
+
+  if (shouldUseOldWay) {
+    Json::Reader reader;
+    reader.parse(rawJson, root);
+  } 
+  const std::string name = root["Name"].asString();
+  const int age = root["Age"].asInt();
+
           long response_code;
 
           curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
@@ -124,11 +175,12 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
             overlay_->view()->LoadURL("file:///login-error.html");
           } 
           else if (response_code == 200) {
+            
             overlay_->view()->LoadURL("file:///login-successful.html");
           }
 
         }
- 
+           fclose(file);
     curl_easy_cleanup(curl);
   }
   curl_global_cleanup();
@@ -277,12 +329,6 @@ void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
 // }
 
 
-
-static size_t write_data_to_filesystem(void *pointer, size_t size, size_t nmemb, void *stream)
-{
-  size_t is_written_to_filesystem = fwrite(pointer, size, nmemb, (FILE *)stream);
-  return is_written_to_filesystem;
-}
 
 int update_progress_bar(void* ptr, double totalToDownload, double nowDownloaded, double totalToUpload, double nowUploaded)
 {
