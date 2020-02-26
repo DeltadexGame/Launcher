@@ -9,6 +9,8 @@
 #include <sstream>
 #include <malloc.h>
 #include "json/json.h"
+#include <json/value.h>
+#include <fstream>
 
 #include <cstring>
 #include "curl/curl.h"
@@ -58,12 +60,11 @@ void Launcher::Run() {
   app_->Run();
 }
 
-inline std::string ToUTF8(const ultralight::String& str) {
+inline std::string convert_to_utf8(const ultralight::String& str) {
+  // Get utf8 string
   ultralight::String8 utf8 = str.utf8();
   return std::string(utf8.data(), utf8.length());
 }
-
-
 
 static size_t write_data_to_filesystem(void *pointer, size_t size, size_t nmemb, void *stream)
 {
@@ -71,16 +72,7 @@ static size_t write_data_to_filesystem(void *pointer, size_t size, size_t nmemb,
   return is_written_to_filesystem;
 }
 
-static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
-{
-    ((std::string*)userp)->append((char*)contents, size * nmemb);
-    return size * nmemb;
-}
-
-
 void Launcher::Login(const JSObject& obj, const JSArgs& args) {
-  
-
   CURL *curl;
   CURLcode res;
   FILE *file;
@@ -96,8 +88,8 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
     String username_string = args[0];
     String password_string = args[1];
 
-    std::string username = ToUTF8(username_string);
-    std::string password = ToUTF8(password_string);
+    std::string username = convert_to_utf8(username_string);
+    std::string password = convert_to_utf8(password_string);
 
     char * username_cstr = new char [username.length()+1];
     std::strcpy (username_cstr, username.c_str());
@@ -114,27 +106,15 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
     strcat (json_str, "\"}");
 
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_str);
-    // std::string readBuffer;
 
-    // readBuffer.clear();
-    // curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    // curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-
-        char output_filename[FILENAME_MAX] = "response.txt";
-
+    char output_filename[FILENAME_MAX] = "response.json";
   
-        file = fopen(output_filename,"w");
+    file = fopen(output_filename,"w");
 
-        if (file) {
-  // Write data to the filesystem
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_to_filesystem);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
-
-
-        }
-
-
-      
+    if (file) {
+      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_to_filesystem);
+      curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
+    }
 
     // Set headers
     struct curl_slist *headers = NULL;
@@ -151,25 +131,10 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
 
         if(res != CURLE_OK) {
           overlay_->view()->LoadURL("file:///signup-error.html");
-
         }
 
         else {
-          const std::string rawJson = "({"Age": 20, "Name": "colin"})";
-  const auto rawJsonLength = static_cast<int>(rawJson.length());
-  constexpr bool shouldUseOldWay = false;
-  JSONCPP_STRING err;
-  Json::Value root;
-
-  if (shouldUseOldWay) {
-    Json::Reader reader;
-    reader.parse(rawJson, root);
-  } 
-  const std::string name = root["Name"].asString();
-  const int age = root["Age"].asInt();
-
           long response_code;
-
           curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
           if (response_code == 403) {
             overlay_->view()->LoadURL("file:///login-error.html");
@@ -178,9 +143,8 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
             
             overlay_->view()->LoadURL("file:///login-successful.html");
           }
-
         }
-           fclose(file);
+    fclose(file);
     curl_easy_cleanup(curl);
   }
   curl_global_cleanup();
@@ -202,15 +166,16 @@ void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
     String username_string = args[0];
     String password_string = args[1];
 
-    std::string username = ToUTF8(username_string);
-    std::string password = ToUTF8(password_string);
+    std::string username = convert_to_utf8(username_string);
+    std::string password = convert_to_utf8(password_string);
 
+    // Convert to c string
     char * username_cstr = new char [username.length()+1];
     std::strcpy (username_cstr, username.c_str());
 
+    // Convert to c string
     char * password_cstr = new char [password.length()+1];
     std::strcpy (password_cstr, password.c_str());
-
 
     // Create JSON data
     char json_str[80];
@@ -234,101 +199,23 @@ void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
 
     res = curl_easy_perform(curl);
 
-        if(res != CURLE_OK) {
-          overlay_->view()->LoadURL("file:///signup-error.html");
+    if(res != CURLE_OK) {
+      overlay_->view()->LoadURL("file:///signup-error.html");
 
-        }
+    }
 
-        else {
-          long response_code;
+    else {
+      long response_code;
 
-          curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-          if (response_code == 200) {
-            overlay_->view()->LoadURL("file:///signup-successful.html");
-          }
-
-        }
- 
+      curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+      if (response_code == 200) {
+        overlay_->view()->LoadURL("file:///signup-successful.html");
+      }
+    }
     curl_easy_cleanup(curl);
   }
   curl_global_cleanup();
 }
-
-
-
-// JSValueRef OnSignUp(JSContextRef ctx, JSObjectRef function,
-//   JSObjectRef thisObject, size_t argumentCount, 
-//   const JSValueRef arguments[], JSValueRef* exception) {
-
-
-//    CURL *curl;
-//   CURLcode res;
- 
-//   /* In windows, this will init the winsock stuff */ 
-//   curl_global_init(CURL_GLOBAL_ALL);
- 
-//   /* get a curl handle */ 
-//   curl = curl_easy_init();
-//   if(curl) {
-
-//     curl_easy_setopt(curl, CURLOPT_URL, "http://185.49.60.100/auth/register");
-//     char * username = arguments[0];
-//     char * password = arguments[1];
-    
-//     // Create JSON data
-//     char json_str[80];
-//     strcpy (json_str,"{\"username\" : \"");
-//     strcat (json_str, username);
-//     strcat (json_str, "\", \"password\" : \"");
-//     strcat (json_str, password);
-//     strcat (json_str, "\"}");
-
-//     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json_str);
-
-//     // Set headers
-//     struct curl_slist *headers = NULL;
-//     headers = curl_slist_append(headers, "Accept: application/json");
-//     headers = curl_slist_append(headers, "Content-Type: application/json");
-//     headers = curl_slist_append(headers, "charsets: utf-8");
-//     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers); 
-
-//     res = curl_easy_perform(curl);
-
-//         if(res != CURLE_OK) {
-//           const char* str = "document.getElementById('result').innerText = 'Could not sign you up. Please try again!'";
-
-//           JSStringRef script = JSStringCreateWithUTF8CString(str);
-
-//           JSEvaluateScript(ctx, script, 0, 0, 0, 0);
-
-//           JSStringRelease(script);
-//         }
-
-//         else {
-//           long response_code;
-
-//           curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-//           if (response_code == 200) {
-//             const char* str = "document.getElementById('result').innerText = 'Success!'";
-
-//             JSStringRef script = JSStringCreateWithUTF8CString(str);
-
-//             JSEvaluateScript(ctx, script, 0, 0, 0, 0);
-
-//             JSStringRelease(script);
-//           }
-
-//         }
- 
-//     /* always cleanup */ 
-//     curl_easy_cleanup(curl);
-//   }
-//   curl_global_cleanup();
-
-//   return JSValueMakeNull(ctx);
-// }
-
-
 
 int update_progress_bar(void* ptr, double totalToDownload, double nowDownloaded, double totalToUpload, double nowUploaded)
 {
@@ -368,7 +255,6 @@ static void downloadCards() {
 }
 
 static void downloadGame(JSContextRef ctx) {
-
     // Download the game. 
     // For now it just downloads a standard JAR open-source file available from GitHub and executes it.
     // When jar files will be built of the game, the following link below will be replaced.
@@ -377,7 +263,7 @@ static void downloadGame(JSContextRef ctx) {
     CURLcode res;
 
     // Initialize URL which contains card
-    const char *url = "https://raw.githubusercontent.com/michealodwyer26/Amid-The-Ruins-Of-Aspic/master/Amid%20The%20Ruins%20Of%20Aspic.jar";
+    const char *url = "https://github.com/DeltadexGame/Client/releases/download/1.0/desktop-1.0.jar";
 
     // Initialize output filename 
     char output_filename[FILENAME_MAX] = "assets/deltadex.jar";
@@ -390,9 +276,9 @@ static void downloadGame(JSContextRef ctx) {
     {
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-        fp = fopen(output_filename,"wb");
+        fp = fopen(output_filename, "wb");
         curl_easy_setopt(curl, CURLOPT_URL, url);
-
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
         curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress_bar); 
 
@@ -461,7 +347,26 @@ JSValueRef OnDownloadGame(JSContextRef ctx, JSObjectRef function,
   JSStringRelease(script);
 
   downloadGame(ctx);
-  system("start javaw -jar assets/deltadex.jar");
+
+  std::ifstream response("response.json", std::ifstream::binary);
+  Json::Value json_obj;
+
+  response >> json_obj;
+
+  Json::Value content = json_obj["content"];
+
+  Json::Value username = content["username"];
+  std::string token = content["token"].asString();
+
+  std::string command = "start javaw -jar assets/deltadex.jar ";
+
+  // Append token 
+  command += token;
+
+  char * command_cstr = new char [command.length()+1];
+  std::strcpy (command_cstr, command.c_str());
+  
+  system(command_cstr);
   
   return JSValueMakeNull(ctx);
 }
@@ -477,7 +382,6 @@ void Launcher::OnDOMReady(View* view) {
   global["SignUp"] = BindJSCallback(&Launcher::SignUp);
   global["Login"] = BindJSCallback(&Launcher::Login);
 
-
   JSStringRef name = JSStringCreateWithUTF8CString("OnDownloadGame");
 
   JSObjectRef function = JSObjectMakeFunctionWithCallback(context, name, 
@@ -488,7 +392,4 @@ void Launcher::OnDOMReady(View* view) {
   JSObjectSetProperty(context, globalObj, name, function, 0, 0);
 
   JSStringRelease(name);
-
-
-  
 }

@@ -1,5 +1,6 @@
 [requires]
 libcurl/7.68.0
+jsoncpp/1.9.2
 
 [generators]
 cmake
