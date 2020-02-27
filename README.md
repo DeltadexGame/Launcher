@@ -1,7 +1,7 @@
 # Launcher v0.1.0
 This repo comprises the source code and assets for the Deltadex Game Launcher.
 
-![Live demo of the launcher in action](https://i.imgur.com/qSXiuFh.gif)
+![Live demo of the launcher in action](https://i.imgur.com/aigy3JJ.gif)
 
 ## Development Phases 
 

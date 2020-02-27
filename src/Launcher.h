@@ -25,16 +25,12 @@ public:
 
   virtual void Login(const JSObject& obj, const JSArgs& args);
 
-  virtual void OnStart();
-
-  virtual void DisplayPage(std::string filename);
+  virtual void DisplayPage(const JSObject& obj, const JSArgs& args);
 
   virtual void OnDownloadGame(const JSObject& obj, const JSArgs& args);
 
-  virtual void UpdateCursor(const JSObject& obj, const JSArgs& args);
-
   virtual JSValue VerifyAuth(const JSObject& obj, const JSArgs& args);
-  
+
   virtual void Logout(const JSObject& obj, const JSArgs& args);
 
   virtual void OnDOMReady(View* caller) override;

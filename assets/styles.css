@@ -49,6 +49,8 @@ button {
     cursor: pointer;
     margin-top: 1em;
     display: block;
+    padding: 1em;
+    align-content: center;
 }
 
 button:hover {
@@ -191,7 +193,7 @@ ul li {
 }
 
 .md-18:hover{
-    color: rgb(172, 111, 149);
+    color: rgb(50, 139, 255);
     cursor: pointer;
 }
 

@@ -95,13 +95,13 @@
                     <button onclick="launch()" onmousedown="startProgressAnimation()">Launch Game</button>
 
                     <div id="result"></div>
+                    <p id="auth"></p>
 
                     <div id="results">
 
                     </div>
-                    <div class="lds-ripple" id="loading_anim"><div></div><div></div></div>
 
-                    <div id="progress_container">
+                    <div id="progress_container" style="display: none;">
                       <div id="progress_bar"></div>
                     </div>
 
@@ -113,9 +113,12 @@
     </div>
 
     <script>
-    function launch() {
-        document.getElementById("result").innerHTML = "";
+    var progress = 0;
 
+    function launch() {
+        // reset statuses first
+        clearStatuses();
+        displayProgressBar();
         appendNewStatus("Downloading images ...");
 
         setTimeout(function () {OnDownloadGame(); }, 400);
@@ -127,8 +130,18 @@
 
       }
 
+      function clearStatuses() {
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("results").innerHTML = "";
+      }
+
       function updateStatus(status) {
         document.getElementById("result").innerHTML = status;
+
+      }
+
+      function displayProgressBar() {
+        document.getElementById("progress_container").style.display = "inline";
 
       }
 

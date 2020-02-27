@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <AppCore/JSHelpers.h>
 #include <AppCore/App.h>
 #include <AppCore/Window.h>
@@ -60,12 +61,14 @@ void Launcher::Run() {
   app_->Run();
 }
 
+// Convert an Ultralight string to a UTF8 string.
 inline std::string convert_to_utf8(const ultralight::String& str) {
   // Get utf8 string
   ultralight::String8 utf8 = str.utf8();
   return std::string(utf8.data(), utf8.length());
 }
 
+// Check if a file exists on the file system.
 bool file_exists (const std::string& filename) {
   // check if file exists on the filesystem or not by opening for reading.
   if (FILE *fp = fopen(filename.c_str(), "r")) {
@@ -77,6 +80,7 @@ bool file_exists (const std::string& filename) {
   return false; 
 }
 
+// Check if a user is logged-into their Deltadex account.
 bool is_logged_in()
 {   
   char filename[FILENAME_MAX] = "response.json";
@@ -98,17 +102,20 @@ bool is_logged_in()
   return false;
 }
 
+// libcurl callback to write data to the filesystem (write response from API)
 static size_t write_data_to_filesystem(void *pointer, size_t size, size_t nmemb, void *stream)
 {
   size_t is_written_to_filesystem = fwrite(pointer, size, nmemb, (FILE *)stream);
   return is_written_to_filesystem;
 }
 
+// Verify if a user is authenticated, for JS interop.
 JSValue Launcher::VerifyAuth(const JSObject& obj, const JSArgs& args) {
   bool is_user_logged_in = is_logged_in();
   return JSValue(is_user_logged_in);
 }
 
+// Login to Deltadex account.
 void Launcher::Login(const JSObject& obj, const JSArgs& args) {
   CURL *curl;
   CURLcode res;
@@ -186,6 +193,7 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
   curl_global_cleanup();
 }
 
+// Sign up for a Deltadex account.
 void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
 
   CURL *curl;
@@ -252,6 +260,7 @@ void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
   curl_global_cleanup();
 }
 
+// Logout from Deltadex account and update auth file on filesystem.
 void Launcher::Logout(const JSObject& obj, const JSArgs& args) {
   FILE *fp;
   char filename[FILENAME_MAX] = "response.json";
@@ -262,18 +271,6 @@ void Launcher::Logout(const JSObject& obj, const JSArgs& args) {
     // clear the file's authentication details.
     fp = fopen(filename,"w");
   }
-}
-
-void Launcher::OnStart() {
-  bool logged_in = is_logged_in();
-
-  if (logged_in) {
-    overlay_->view()->LoadURL("file:///login.html");
-  }
-  else {
-    overlay_->view()->LoadURL("file:///login.html");
-  }
-  overlay_->view()->LoadURL("file:///login.html");
 }
 
 int update_progress_bar(void* ptr, double totalToDownload, double nowDownloaded, double totalToUpload, double nowUploaded)
@@ -359,18 +356,17 @@ static void downloadGame() {
 }
 
 // Update cursor when user hovers over links
-void Launcher::UpdateCursor(const JSObject& obj, const JSArgs& args) {
-  Cursor cursor = Cursor::kCursor_Pointer;
-  window_->SetCursor(cursor);
-}
+void Launcher::DisplayPage(const JSObject& obj, const JSArgs& args) {
+  String path_to_file = "file:///";
 
-// Update cursor when user hovers over links
-void Launcher::DisplayPage(std::string filename) {
-  char * filename_cstr = new char [filename.length()+1];
-  std::strcpy (filename_cstr, filename.c_str());
+  // Get the name of the desired page and append to the path
+  String desired_page = args[0];
+  path_to_file += desired_page;
 
-  String filename_ultralight_str = ultralight::String(filename_cstr);
-  overlay_->view()->LoadURL(filename_ultralight_str);
+  // Finally, append the file extension
+  path_to_file += ".html";
+
+  overlay_->view()->LoadURL(path_to_file);
 }
 
 // Clean up resources here
@@ -392,7 +388,7 @@ void Launcher::OnDownloadGame(const JSObject& obj, const JSArgs& args) {
 
   if (isLoggedIn) {
 
-    downloadGame();
+    // downloadGame();
 
     std::ifstream response("response.json", std::ifstream::binary);
     Json::Value json_obj;
@@ -416,9 +412,13 @@ void Launcher::OnDownloadGame(const JSObject& obj, const JSArgs& args) {
   }
 
   else {
-    DisplayPage("file:///login.html");
-  }
+    std::string filename = "file:///login.html";
+    char * filename_cstr = new char [filename.length()+1];
+    std::strcpy (filename_cstr, filename.c_str());
 
+    String filename_ultralight_str = ultralight::String(filename_cstr);
+    overlay_->view()->LoadURL(filename_ultralight_str); 
+  }
 }
 
 // When the DOM is ready and has finished loading, bind JS callbacks here. 
@@ -427,12 +427,12 @@ void Launcher::OnDOMReady(View* view) {
   JSContextRef context = view->js_context();
   JSObject global = JSGlobalObject();
 
-  global["OnUpdateCursor"] = BindJSCallback(&Launcher::UpdateCursor);
   global["SignUp"] = BindJSCallback(&Launcher::SignUp);
   global["Login"] = BindJSCallback(&Launcher::Login);
   global["OnDownloadGame"] = BindJSCallback(&Launcher::OnDownloadGame);
   global["VerifyAuth"] = BindJSCallbackWithRetval(&Launcher::VerifyAuth);
   global["Logout"] = BindJSCallback(&Launcher::Logout);
+  global["DisplayPage"] = BindJSCallback(&Launcher::DisplayPage);
 
   view->EvaluateScript("display()");
 }
