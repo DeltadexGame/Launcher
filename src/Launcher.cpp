@@ -387,8 +387,7 @@ void Launcher::OnDownloadGame(const JSObject& obj, const JSArgs& args) {
   bool isLoggedIn = is_logged_in();
 
   if (isLoggedIn) {
-
-    // downloadGame();
+    downloadGame();
 
     std::ifstream response("response.json", std::ifstream::binary);
     Json::Value json_obj;
@@ -397,12 +396,14 @@ void Launcher::OnDownloadGame(const JSObject& obj, const JSArgs& args) {
 
     Json::Value content = json_obj["content"];
 
-    Json::Value username = content["username"];
+    std::string username = content["username"].asString();
     std::string token = content["token"].asString();
 
     std::string command = "start javaw -jar assets/deltadex.jar ";
 
     // Append token 
+    command += username;
+    command += " ";
     command += token;
 
     char * command_cstr = new char [command.length()+1];

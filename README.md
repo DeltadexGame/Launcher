@@ -3,6 +3,11 @@ This repo comprises the source code and assets for the Deltadex Game Launcher.
 
 ![Live demo of the launcher in action](https://i.imgur.com/aigy3JJ.gif)
 
+## Specs
+Total Size: ~26.4MB 
+
+Electron apps' typical file sizes start at 120MB and onwards.
+
 ## Development Phases 
 
 #### 1. Initial Mockups

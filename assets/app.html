@@ -87,11 +87,14 @@
           <section class="content">
 
             <article class="login">
-                <h1>Get Started</h1>
+                <h1 id="landing_title">Get Started</h1>
 
-                <img src="file:///Deltadex.PnG" />
+                <img src="file:///Deltadex.PnG" id="landing_img"/>
 
-                <button onmouseup="launch();">Launch Game</button>
+                <span class="btn_span">
+                  <div onmouseup="launch();" class="btn">Launch Game</div>
+
+                </span>
                 <div id="result"></div>
                 <p id="auth"></p>
 
@@ -112,6 +115,11 @@
       var progress = 0;
 
       function launch() {
+        var landing_img = document.getElementById("landing_img");
+        landing_img.style.display = "none";
+        var landing_title = document.getElementById("landing_title");
+        landing_title.style.marginBottom = "5vh";
+
         var is_logged_in = VerifyAuth();
 
         if (is_logged_in == true) {
