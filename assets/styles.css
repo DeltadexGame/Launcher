@@ -41,8 +41,7 @@ h1 {
 
 .btn {
     padding: 0px;
-    display: inline-block;
-    vertical-align:middle;
+    display: inline;
     background-color: blue;
     font-family: "Roboto", sans-serif;
     color: white;
@@ -60,6 +59,10 @@ h1 {
     background-color: rgb(0, 48, 136);
 }
 
+.btn_block {
+    display: block;
+}
+
 .default {
     height: 100%;
     z-index: -3;
@@ -75,6 +78,10 @@ h1 {
 }
     
 .main_content {
+    padding-top: 14vh;
+}
+
+.news_content {
     padding-top: 14vh;
 }
 
@@ -119,6 +126,7 @@ nav {
     position: fixed; /* Set the navbar to fixed position */
     top: 0; /* Position the navbar at the top of the page */
     width: 100%; /* Full width */
+    z-index: 1000;
 }
     
 nav li {
@@ -302,4 +310,40 @@ ul li {
     width: 1%;
     height: 30px;
     background-color: #4CAF50;
+}
+
+.news h1 {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    font-size: 5vh;
+}
+  
+.news_item {
+    position: relative;
+    color: white;
+    width: 80%;
+    margin-top: 5vh;
+}
+  
+.news {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100vh;
+}
+  
+.news_item h3 {
+    position: absolute;
+    top: 2%;
+    left: 4%;
+    margin-bottom: 0.5vh;
+    color: red;
+}
+  
+.news_item p {
+    position: absolute;
+    top: 31%;
+    left: 5%;
+    margin-bottom: 0.5vh;
 }

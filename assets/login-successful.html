@@ -92,8 +92,10 @@
 
                     <h3>You've logged-in successfully.</h3>
 
-                    <button onclick="launch()" onmousedown="startProgressAnimation()">Launch Game</button>
-
+                    <span class="btn_block">
+                      <div onclick="launch()" onmousedown="startProgressAnimation()">Launch Game</div>
+                    </span>
+                    
                     <div id="result"></div>
                     <p id="auth"></p>
 
@@ -119,13 +121,13 @@
         // reset statuses first
         clearStatuses();
         displayProgressBar();
-        appendNewStatus("Downloading images ...");
+        appendNewStatus("Downloading assets ...");
 
         setTimeout(function () {OnDownloadGame(); }, 400);
         setTimeout(function () { startProgressAnimation();}, 100);
         setTimeout(function () { appendNewStatus("Downloading images ...");}, 100);
         setTimeout(function () { appendNewStatus("Downloading files ...");}, 250);
-        setTimeout(function () { appendNewStatus("Downloading assets ...");}, 350);
+        setTimeout(function () { appendNewStatus("Setting up ...");}, 350);
         setTimeout(function () { appendNewStatus("Executing ...");}, 500);
 
       }
