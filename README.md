@@ -5,7 +5,7 @@ This repo comprises the source code and assets for the Deltadex Game Launcher.
 
 ## News Feed
 
-[Imgur](https://i.imgur.com/lX812lH.gifv)
+![Live demo of the news feed in action](https://i.imgur.com/lX812lH.gif)
 
 ## Specs
 Total Size: ~26.4MB 
@@ -27,12 +27,16 @@ Electron tends to lead to a bloated binary file size and has performance issues.
 I moved to Ultralight, which allows for the above. It allowed me to create the HTML/CSS/JS frontend, and then manage JS callbacks 
 with C++ for native tasks, such as executing the game's JAR file, etc., 
 
+### Why Ultralight?
+- Performant
+- Small binary sizes 
+- Allowed me to create the frontend with HTML/CSS/JS
+
 #### 3. Development 
 Development began mid-Week 2 once the mockups were finalised and is currently ongoing. 
 
 #### To-Do
-The following items will be completed in the coming week(s):
-- Start communication with the API for sign-up and login of the users.
+The following items will be completed in the coming week:
 - Download images of cards from the project's CDN into an assets directory, for the game client to make use of them.
 
 ## Running/Building
