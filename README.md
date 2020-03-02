@@ -3,6 +3,10 @@ This repo comprises the source code and assets for the Deltadex Game Launcher.
 
 ![Live demo of the launcher in action](https://i.imgur.com/aigy3JJ.gif)
 
+## News Feed
+
+[Imgur](https://i.imgur.com/lX812lH.gifv)
+
 ## Specs
 Total Size: ~26.4MB 
 

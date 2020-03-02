@@ -336,7 +336,7 @@ ul li {
 .news_item h3 {
     position: absolute;
     top: 2%;
-    left: 4%;
+    left: 5%;
     margin-bottom: 0.5vh;
     color: red;
 }
@@ -344,6 +344,6 @@ ul li {
 .news_item p {
     position: absolute;
     top: 31%;
-    left: 5%;
+    left: 5.5%;
     margin-bottom: 0.5vh;
 }
