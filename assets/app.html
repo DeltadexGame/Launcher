@@ -75,8 +75,8 @@
       <nav class="topnav">
         <span id="logo">Deltadex</span>
         <ul>
-          <li>Latest Cards</li>
-          <li>News</li>
+          <li><a href="file:///latest-cards.html">Latest Cards</a></li>
+          <li><a href="file:///news.html">News</a></li>
         </ul>
       
       </nav>
@@ -124,7 +124,7 @@
         if (is_logged_in == true) {
           clearStatuses();
           displayProgressBar();
-          appendNewStatus("Downloading images ...");
+          appendNewStatus("Downloading resources ...");
 
           setTimeout(function () {OnDownloadGame()}, 400);
           setTimeout(function () { startProgressAnimation();}, 100);

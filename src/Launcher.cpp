@@ -61,8 +61,8 @@ void Launcher::Run() {
   app_->Run();
 }
 
-// Convert an Ultralight string to a UTF8 string.
-inline std::string convert_to_utf8(const ultralight::String& str) {
+// Convert an Ultralight string to a UTF-8 string.
+std::string convert_to_utf8(const ultralight::String& str) {
   // Get utf8 string
   ultralight::String8 utf8 = str.utf8();
   return std::string(utf8.data(), utf8.length());
@@ -193,6 +193,20 @@ void Launcher::Login(const JSObject& obj, const JSArgs& args) {
   curl_global_cleanup();
 }
 
+// Logout from Deltadex account and update auth file on filesystem.
+void Launcher::Logout(const JSObject& obj, const JSArgs& args) {
+  FILE *fp;
+  char filename[FILENAME_MAX] = "response.json";
+
+  std::ifstream file(filename);
+
+  if (file_exists(filename)) {
+    // clear the file's authentication details.
+    fp = fopen(filename,"w");
+  }
+}
+
+
 // Sign up for a Deltadex account.
 void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
 
@@ -260,24 +274,6 @@ void Launcher::SignUp(const JSObject& obj, const JSArgs& args) {
   curl_global_cleanup();
 }
 
-// Logout from Deltadex account and update auth file on filesystem.
-void Launcher::Logout(const JSObject& obj, const JSArgs& args) {
-  FILE *fp;
-  char filename[FILENAME_MAX] = "response.json";
-
-  std::ifstream file(filename);
-
-  if (file_exists(filename)) {
-    // clear the file's authentication details.
-    fp = fopen(filename,"w");
-  }
-}
-
-int update_progress_bar(void* ptr, double totalToDownload, double nowDownloaded, double totalToUpload, double nowUploaded)
-{
-    return 0;
-}
-
 static void downloadCards() {
     // Set up 
     CURL *curl;
@@ -337,7 +333,6 @@ static void downloadGame() {
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
-    curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, update_progress_bar); 
 
     // Write data to the filesystem
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data_to_filesystem);

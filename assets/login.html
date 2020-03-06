@@ -77,8 +77,8 @@
       <nav class="topnav">
         <span id="logo">Deltadex</span>
         <ul>
-          <li>Latest Cards</li>
-          <li>News</li>
+          <li><a href="file:///latest-cards.html">Latest Cards</a></li>
+          <li><a href="file:///news.html">News</a></li>
         </ul>
       
       </nav>
@@ -110,8 +110,13 @@
             
             <p>Want to logout?</p>
             <div onclick="logout()" class="btn">Logout</div>
-        </article>
-        <p id="logout_msg"></p>
+          </article>
+          <p id="logout_msg"></p>
+
+          <section id="logout_section">
+            
+          </section>
+
           </section>
       </div>      
       </div>
@@ -133,7 +138,19 @@
       function logout() {
         Logout();
         document.getElementById("logged-in").style.display = "none";
-        document.getElementById("logout_msg").innerHTML = "Logged out successfully."
+        let logoutmsg = document.createElement("p");
+        logoutmsg.innerText = "Logged out successfully.";
+
+        document.getElementById("logout_section").appendChild(logoutmsg);
+        
+        // Append link to container.
+        var link = document.createElement("a");
+        var logout_link_text = document.createTextNode("Login with a different account.");
+        link.appendChild(logout_link_text);
+        link.href = "file:///login.html";
+        
+
+        document.getElementById("logout_section").appendChild(link);
       }
       
       function validateFormData() {

@@ -53,6 +53,11 @@ h1 {
     margin-right: auto;
     margin-top: auto;
     margin-bottom: auto;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
 }
 
 .btn:hover {
@@ -61,6 +66,7 @@ h1 {
 
 .btn_block {
     display: block;
+    margin-top: 1vh;
 }
 
 .default {
